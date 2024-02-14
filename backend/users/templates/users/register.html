@@ -2,7 +2,8 @@
 {% block content %}
  <form action="" method="POST">
   {% csrf_token %}
-  {{form.as_p}}
+  {{form_user.as_p}}
+  {{form_profile.as_p}}
   <input type="submit" value="REGISTER">
  </form>
 {% endblock %}
