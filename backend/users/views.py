@@ -16,3 +16,14 @@ def register(request):
   "form": form,
  }
  return render(request, 'users/register.html', context)
+
+def user_login(request):
+ form = AuthenticationForm(request, data=request.POST or None)
+ if form.is_valid():
+  user = form.get_user()
+  login(request,user)
+  return redirect("register")
+ context = {
+  "form": form,
+ }
+ return render(request, 'users/login.html', context)
