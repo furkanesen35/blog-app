@@ -1,7 +1,8 @@
-from django.shortcuts import render,HttpResponse,redirect
+from django.shortcuts import render,HttpResponse,redirect,get_object_or_404
 from django.contrib.auth.models import User
 from .models import Post,Comment,PostView,Like
 from .forms import PostForm,CommentForm
+from django.contrib import messages
 
 def home(request):
  posts = Post.objects.filter(status="p")
@@ -23,3 +24,19 @@ def add(request):
   "form" : form
  }
  return render(request, "blog/add.html", context)
+
+def update(request,slug):
+ post = get_object_or_404(Post, slug=slug)
+ form = PostForm(request.POST or None, request.FILES or None, instance=post)
+ if request.user.id != post.author.id:
+  messages.warning(request, "You are not authorized!!!")
+  return redirect("home")
+ if form.is_valid():
+  form.save()
+  messages.success(request, "Post Updated!")
+  return redirect("home")
+ context = {
+  "post": post,
+  "form": form,
+ }
+ return render(request, 'blog/update.html', context)
