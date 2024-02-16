@@ -40,3 +40,10 @@ def update(request,slug):
   "form": form,
  }
  return render(request, 'blog/update.html', context)
+
+def delete(request,slug):
+ post = get_object_or_404(Post, slug=slug)
+ context = {
+  'post': post,
+ }
+ return render(request, 'blog/delete.html', context)
