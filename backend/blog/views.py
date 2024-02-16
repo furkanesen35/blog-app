@@ -43,6 +43,9 @@ def update(request,slug):
 
 def delete(request,slug):
  post = get_object_or_404(Post, slug=slug)
+ if request.method == "POST":
+  post.delete()
+  return redirect("home")
  context = {
   'post': post,
  }
