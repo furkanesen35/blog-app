@@ -27,6 +27,14 @@ class Post(models.Model):
  slug = models.SlugField(blank=True)
  def __str__(self):
   return self.title
+ def comment_count(self):
+  return self.comment_set.all().count()
+ def view_count(self):
+  return self.postview_set.all().count()
+ def like_count(self):
+  return self.like_set.all().count()
+ def comments(self):
+  return self.comment_set.all()
  
 class Comment(models.Model):
  user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comment")
