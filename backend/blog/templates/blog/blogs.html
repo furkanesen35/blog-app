@@ -1,6 +1,14 @@
 {% extends 'blog/base.html' %}
 {% block content %}
- {% for post in posts %}
-  {{post.title}}
- {% endfor %}
+ <ul>
+  {% for post in posts %}
+   <li>
+    <a href="{% url 'update' post.slug %}">{{post.title}}</a>
+    <a href="{% url 'details' post.slug %}">
+     <button>DETAILS</button>
+    </a>
+    <a href="{% url 'delete' post.slug %}">X</a>
+   </li>
+  {% endfor %}
+ </ul>
 {% endblock content %}

@@ -1,0 +1,29 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+ <p>Title: {{ object.title }}</p>
+ <p>Content: {{ object.content }}</p>
+ <p>Comment Count: {{ object.comment_count }}</p>
+ <p>View Count: {{ object.view_count }}</p>
+ <p>
+  Enjoyed this post? Give it a like!
+ </p>
+ <p>
+  Comments
+  {% for comment in object.comments %}
+  <li>
+   {{ comment.content }}
+   <p>
+    Comment by {{ comment.user }} - {{ comment.time_stamp }}
+   </p>
+  </li>
+  {% endfor %}
+ </p>
+ <p>
+  Leave a comment below
+ </p>
+ <form action="" method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="COMMENT">
+ </form>
+{% endblock content %}
