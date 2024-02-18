@@ -1,8 +1,12 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
  return (
-  <div className="bg-black text-white">Navbar</div>
+  <div className="flex justify-around bg-black text-white">
+   <Link to="/login">Login</Link>
+   <Link to="/register">Register</Link>
+  </div>
  )
 }
 
