@@ -16,7 +16,7 @@ def add(request):
  elif request.method == "POST":
   serializer = PostSerializer(data=request.data)
   if serializer.is_valid():
-   serializer.save()
+   serializer.save(author=request.user)
    data = { "message": "Post created successfully" }
    return Response(data, status=status.HTTP_201_CREATED)
   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -64,33 +64,6 @@ def get_update_delete(request,slug):
 #   'form': form,
 #  } 
 #  return render(request, 'blog/details.html', context)
-
-# @login_required()
-# def update(request,slug):
-#  post = get_object_or_404(Post, slug=slug)
-#  form = PostForm(request.POST or None, request.FILES or None, instance=post)
-#  if request.user.id != post.author.id:
-#   messages.warning(request, "You are not authorized!!!")
-#   return redirect("home")
-#  if form.is_valid():
-#   form.save()
-#   messages.success(request, "Post Updated!")
-#   return redirect("home")
-#  context = {
-#   "post": post,
-#   "form": form,
-#  }
-#  return render(request, 'blog/update.html', context)
-
-# def delete(request,slug):
-#  post = get_object_or_404(Post, slug=slug)
-#  if request.method == "POST":
-#   post.delete()
-#   return redirect("home")
-#  context = {
-#   'post': post,
-#  }
-#  return render(request, 'blog/delete.html', context)
 
 # @login_required()
 # def like(request, slug):

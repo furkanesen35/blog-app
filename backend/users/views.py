@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse,redirect
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,login
 from .serializers import RegisterSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -30,6 +30,7 @@ def user_login(request):
   password = request.data.get('password')
   user = authenticate(username=username, password=password)
   if user:
+   login(request,user)
    return Response({'message': 'Login successful'})
   else:
    return Response({'message': 'Invalid username or password'}, status=400)

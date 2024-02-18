@@ -4,4 +4,4 @@ from .models import Post,PostView,Category,Like,Comment
 class PostSerializer(serializers.ModelSerializer):
  class Meta:
   model = Post
-  fields = ["title","content","category","status",]
+  fields = ["title","content","category","status"]
