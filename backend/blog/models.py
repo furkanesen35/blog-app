@@ -22,7 +22,7 @@ class Post(models.Model):
  category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=True, null=True)
  publish_date = models.DateTimeField(auto_now_add=True)
  update_date = models.DateTimeField(auto_now=True)
- author = models.ForeignKey(User, on_delete=models.CASCADE)
+ author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
  status = models.CharField(max_length=10, choices=OPTIONS, default='d')
  slug = models.SlugField(blank=True)
  def __str__(self):

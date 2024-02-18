@@ -1,87 +1,105 @@
-from django.shortcuts import render,HttpResponse,redirect,get_object_or_404
+from django.shortcuts import render,get_object_or_404
 from django.contrib.auth.models import User
 from .models import Post,Comment,PostView,Like
-from .forms import PostForm,CommentForm
+from .serializer import PostSerializer
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
-def home(request):
- posts = Post.objects.filter(status="p")
- context = {
-  "posts": posts,
- }
- return render(request, "blog/blogs.html", context)
-
-@login_required()
+@api_view(["GET","POST"])
 def add(request):
- form = PostForm()
- if request.method == "POST":
-  form = PostForm(request.POST, request.FILES)
-  if form.is_valid():
-   post = form.save(commit=False)
-   post.author = request.user
-   post.save()
-   messages.success(request, "Post created successfully!")
-   return redirect("home")
- context = {
-  "form" : form
- }
- return render(request, "blog/add.html", context)
+ if request.method == "GET":
+  posts = Post.objects.all()
+  serializer = PostSerializer(posts, many=True)
+  return Response(serializer.data)
+ elif request.method == "POST":
+  serializer = PostSerializer(data=request.data)
+  if serializer.is_valid():
+   serializer.save()
+   data = { "message": "Post created successfully" }
+   return Response(data, status=status.HTTP_201_CREATED)
+  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def details(request,slug):
- form = CommentForm()
- obj = get_object_or_404(Post, slug=slug)
- if request.user.is_authenticated:
-  PostView.objects.get_or_create(user=request.user, post=obj)
- if request.method == "POST":
-  form = CommentForm(request.POST)
-  if form.is_valid():
-   comment = form.save(commit=False)
-   comment.user = request.user
-   comment.post = obj
-   comment.save()
-   return redirect("details", slug=slug)
- context = {
-  'object': obj,
-  'form': form,
- } 
- return render(request, 'blog/details.html', context)
-
-@login_required()
-def update(request,slug):
- post = get_object_or_404(Post, slug=slug)
- form = PostForm(request.POST or None, request.FILES or None, instance=post)
- if request.user.id != post.author.id:
-  messages.warning(request, "You are not authorized!!!")
-  return redirect("home")
- if form.is_valid():
-  form.save()
-  messages.success(request, "Post Updated!")
-  return redirect("home")
- context = {
-  "post": post,
-  "form": form,
- }
- return render(request, 'blog/update.html', context)
-
-def delete(request,slug):
- post = get_object_or_404(Post, slug=slug)
- if request.method == "POST":
+@api_view(["GET","PUT","DELETE","PATCH"])
+def get_update_delete(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ if request.method == "GET":
+  serializer = PostSerializer(post)
+  return Response(serializer.data, status=status.HTTP_200_OK)
+ elif request.method == "PUT":
+  serializer = PostSerializer(post, data=request.data)
+  if serializer.is_valid():
+   serializer.save()
+   data = { "message": "Post updated successfully" }
+   return Response(data)
+  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+ elif request.method == "PATCH":
+  serializer = PostSerializer(post, data=request.data, partial=True)
+  if serializer.is_valid():
+   serializer.save()
+   data = { "message": "Post updated successfully1" }
+   return Response(data)
+  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+ elif request.method == "DELETE":
   post.delete()
-  return redirect("home")
- context = {
-  'post': post,
- }
- return render(request, 'blog/delete.html', context)
+  data = { "message": "Post deleted successfully" }
+  return Response(data)
 
-@login_required()
-def like(request, slug):
- if request.method == "POST":
-  obj = get_object_or_404(Post, slug=slug)
-  like_qs = Like.objects.filter(user=request.user, post=obj)
-  if like_qs.exists():
-   like_qs[0].delete()
-  else:
-   Like.objects.create(user=request.user, post=obj)
-  return redirect("details", slug=slug)
- return redirect("details", slug=slug)
+# def details(request,slug):
+#  form = CommentForm()
+#  obj = get_object_or_404(Post, slug=slug)
+#  if request.user.is_authenticated:
+#   PostView.objects.get_or_create(user=request.user, post=obj)
+#  if request.method == "POST":
+#   form = CommentForm(request.POST)
+#   if form.is_valid():
+#    comment = form.save(commit=False)
+#    comment.user = request.user
+#    comment.post = obj
+#    comment.save()
+#    return redirect("details", slug=slug)
+#  context = {
+#   'object': obj,
+#   'form': form,
+#  } 
+#  return render(request, 'blog/details.html', context)
+
+# @login_required()
+# def update(request,slug):
+#  post = get_object_or_404(Post, slug=slug)
+#  form = PostForm(request.POST or None, request.FILES or None, instance=post)
+#  if request.user.id != post.author.id:
+#   messages.warning(request, "You are not authorized!!!")
+#   return redirect("home")
+#  if form.is_valid():
+#   form.save()
+#   messages.success(request, "Post Updated!")
+#   return redirect("home")
+#  context = {
+#   "post": post,
+#   "form": form,
+#  }
+#  return render(request, 'blog/update.html', context)
+
+# def delete(request,slug):
+#  post = get_object_or_404(Post, slug=slug)
+#  if request.method == "POST":
+#   post.delete()
+#   return redirect("home")
+#  context = {
+#   'post': post,
+#  }
+#  return render(request, 'blog/delete.html', context)
+
+# @login_required()
+# def like(request, slug):
+#  if request.method == "POST":
+#   obj = get_object_or_404(Post, slug=slug)
+#   like_qs = Like.objects.filter(user=request.user, post=obj)
+#   if like_qs.exists():
+#    like_qs[0].delete()
+#   else:
+#    Like.objects.create(user=request.user, post=obj)
+#   return redirect("details", slug=slug)
+#  return redirect("details", slug=slug)
