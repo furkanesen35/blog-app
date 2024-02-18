@@ -4,8 +4,15 @@
  <p>Content: {{ object.content }}</p>
  <p>Comment Count: {{ object.comment_count }}</p>
  <p>View Count: {{ object.view_count }}</p>
+ <p>Like Count: {{object.like_count }}</p>
  <p>
   Enjoyed this post? Give it a like!
+  <form action="{% url 'like' object.slug %}" method="POST">
+   {% csrf_token %}
+   <input type="hidden" name="post">
+   <input type="hidden" name="user">
+   <button type="submit"><i class="far fa-heart fa-lg"></i>Like</button>
+  </form>
  </p>
  <p>
   Comments
