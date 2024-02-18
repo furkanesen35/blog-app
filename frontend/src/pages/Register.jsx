@@ -4,9 +4,6 @@ import axios from "axios"
 const Register = () => {
  const submitForm = (e) => {
   e.preventDefault()
-  console.log(e.target.username.value);
-  console.log(e.target.password.value);
-  console.log(e.target.email.value);
   const data = {
    username: e.target.username.value,
    password: e.target.password.value,
