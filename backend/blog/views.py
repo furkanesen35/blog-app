@@ -52,6 +52,13 @@ def category(request):
  if request.method == "GET":
   serializer = CategorySerializer(categories, many=True)
   return Response(serializer.data)
+ elif request.method == "POST":
+  serializer = CategorySerializer(data=request.data)
+  if serializer.is_valid():
+   serializer.save()
+   data = { "message": "Category created successfully" }
+   return Response(data, status=status.HTTP_201_CREATED)
+  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # def details(request,slug):
 #  form = CommentForm()
