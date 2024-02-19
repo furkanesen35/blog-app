@@ -7,8 +7,7 @@ const Main = () => {
   const fetchedData = async () => {
    try {
     const response = await axios.get("http://localhost:8000/")
-    console.log(response.data);
-
+    // console.log(response.data);
     setData(response.data)
    } catch (error) {
     console.log(error);
