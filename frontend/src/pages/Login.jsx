@@ -15,11 +15,14 @@ const Login = () => {
    console.log(response)
  }
  return (
-  <div>
+  <div className='flex flex-col  items-center bg-black h-[100vh] w-[100%]'>
+   <div className=''>
+    <h3 className='text-white '>Please Login with your account</h3>
+   </div>
    <form action="" onSubmit={submitForm}>
     <input type="text" name='username' placeholder='username'/>
     <input type="password" name='password' placeholder='password' />
-    <button type='submit'>Submit</button>
+    <button type='submit' className='text-white'>Submit</button>
    </form>
   </div>
  )

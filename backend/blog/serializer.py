@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from .models import Post,PostView,Category,Like,Comment
 
+class CategorySerializer(serializers.ModelSerializer):
+ class Meta:
+  model = Category
+  fields = ["name"]
+
 class LikeSerializer(serializers.ModelSerializer):
  class Meta:
   model = Like

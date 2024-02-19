@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 from django.contrib.auth.models import User
-from .models import Post,Comment,PostView,Like
-from .serializer import PostSerializer
+from .models import Post,Comment,PostView,Like,Category
+from .serializer import PostSerializer,CategorySerializer
 from django.contrib import messages
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -45,6 +45,13 @@ def get_update_delete(request,slug):
   post.delete()
   data = { "message": "Post deleted successfully" }
   return Response(data)
+ 
+@api_view(["GET","POST"])
+def category(request):
+ categories = Category.objects.all()
+ if request.method == "GET":
+  serializer = CategorySerializer(categories, many=True)
+  return Response(serializer.data)
 
 # def details(request,slug):
 #  form = CommentForm()
