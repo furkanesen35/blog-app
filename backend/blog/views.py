@@ -7,44 +7,61 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-@api_view(["GET","POST"])
-def add(request):
- if request.method == "GET":
-  posts = Post.objects.all()
-  serializer = PostSerializer(posts, many=True)
-  return Response(serializer.data)
- elif request.method == "POST":
-  serializer = PostSerializer(data=request.data)
-  if serializer.is_valid():
-   serializer.save()
-   data = { "message": "Post created successfully" }
-   return Response(data, status=status.HTTP_201_CREATED)
-  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(["GET"])
+def get_all_post(request):
+ posts = Post.objects.all()
+ serializer = PostSerializer(posts, many=True)
+ return Response(serializer.data)
 
-@api_view(["GET","PUT","DELETE","PATCH"])
-def get_update_delete(request,slug):
+@api_view(["POST"])
+def add_new_post(request):
+ serializer = PostSerializer(data=request.data)
+ if serializer.is_valid():
+  serializer.save()
+  data = { "message": "Post created successfully" }
+  return Response(data, status=status.HTTP_201_CREATED)
+ return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+def post_detail(request,slug):
  post = get_object_or_404(Post,slug=slug)
- if request.method == "GET":
-  serializer = PostSerializer(post)
-  return Response(serializer.data, status=status.HTTP_200_OK)
- elif request.method == "PUT":
-  serializer = PostSerializer(post, data=request.data)
-  if serializer.is_valid():
-   serializer.save()
-   data = { "message": "Post updated successfully" }
-   return Response(data)
-  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
- elif request.method == "PATCH":
-  serializer = PostSerializer(post, data=request.data, partial=True)
-  if serializer.is_valid():
-   serializer.save()
-   data = { "message": "Post updated successfully1" }
-   return Response(data)
-  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
- elif request.method == "DELETE":
-  post.delete()
-  data = { "message": "Post deleted successfully" }
+ serializer = PostSerializer(post)
+ return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["PUT"])
+def post_edit(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ serializer = PostSerializer(post, data=request.data, partial=True)
+ if serializer.is_valid():
+  serializer.save()
+  data = { "message": "Post updated successfully" }
   return Response(data)
+ return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(["GET","PUT","DELETE","PATCH"])
+# def get_update_delete(request,slug):
+#  post = get_object_or_404(Post,slug=slug)
+
+#  elif request.method == "PUT":
+#   serializer = PostSerializer(post, data=request.data)
+#   if serializer.is_valid():
+#    serializer.save()
+#    data = { "message": "Post updated successfully" }
+#    return Response(data)
+#   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#  elif request.method == "PATCH":
+#   serializer = PostSerializer(post, data=request.data, partial=True)
+#   if serializer.is_valid():
+#    serializer.save()
+#    data = { "message": "Post updated successfully1" }
+#    return Response(data)
+#   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#  elif request.method == "DELETE":
+#   post.delete()
+#   data = { "message": "Post deleted successfully" }
+#   return Response(data)
  
 @api_view(["GET","POST"])
 def category(request):
