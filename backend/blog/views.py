@@ -25,6 +25,23 @@ def add_new_post(request):
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["DELETE"])
+def post_delete(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ post.delete()
+ data = { "message": "Post deleted successfully" }
+ return Response(data)
+
+@api_view(["PUT"])
+def post_edit(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ serializer = PostSerializer(post, data=request.data, partial=True)
+ if serializer.is_valid():
+  serializer.save()
+  data = { "message": "Post updated successfully" }
+  return Response(data)
+ return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(["GET"])
 def post_detail(request,slug):
  post = get_object_or_404(Post,slug=slug)
@@ -50,33 +67,17 @@ def post_comment(request,slug):
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(["PUT"])
-def post_edit(request,slug):
- post = get_object_or_404(Post,slug=slug)
- serializer = PostSerializer(post, data=request.data, partial=True)
+@api_view(["GET"])
+def get_categories(request):
+ categories = Category.objects.all()
+ serializer = CategorySerializer(categories, many=True)
+ return Response(serializer.data)
+
+@api_view(["POST"])
+def add_category(request):
+ serializer = CategorySerializer(data=request.data)
  if serializer.is_valid():
   serializer.save()
-  data = { "message": "Post updated successfully" }
-  return Response(data)
+  data = { "message": "Category created successfully" }
+  return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(["DELETE"])
-def post_delete(request,slug):
- post = get_object_or_404(Post,slug=slug)
- post.delete()
- data = { "message": "Post deleted successfully" }
- return Response(data)
-
-@api_view(["GET","POST"])
-def category(request):
- categories = Category.objects.all()
- if request.method == "GET":
-  serializer = CategorySerializer(categories, many=True)
-  return Response(serializer.data)
- elif request.method == "POST":
-  serializer = CategorySerializer(data=request.data)
-  if serializer.is_valid():
-   serializer.save()
-   data = { "message": "Category created successfully" }
-   return Response(data, status=status.HTTP_201_CREATED)
-  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
