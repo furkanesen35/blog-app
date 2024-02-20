@@ -3,11 +3,17 @@ from .serializers import RegisterSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.models import User
+
+@api_view(["GET"])
+def all_users(request):
+ users = User.objects.all()
+ serializer = RegisterSerializer(users, many=True)
+ return Response(serializer.data)
 
 @api_view(["POST"])
 def register(request):
- data = request.data
- serializer = RegisterSerializer(data=data)
+ serializer = RegisterSerializer(data=request.data)
  if serializer.is_valid():
   serializer.save()
   data = { "message" : f"Student {serializer.validated_data.get("username")} saved successfully!"}

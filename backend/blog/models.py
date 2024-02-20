@@ -37,8 +37,8 @@ class Post(models.Model):
   return self.comment_set.all()
  
 class Comment(models.Model):
- post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments", blank=True)
- user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comment", blank=True)
+ post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments", blank=True, null=True)
+ user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comment", blank=True, null=True)
  time_stamp = models.DateTimeField(auto_now_add=True)
  content = models.TextField()
  def __str__(self):

@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from .models import Post,Comment,Category
+from django.contrib.auth.models import User
 from .serializer import PostSerializer,CategorySerializer,CommentSerializer
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
@@ -25,35 +26,29 @@ def add_new_post(request):
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
+def post_detail(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ serializer = PostSerializer(post)
+ return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(["GET"])
 def get_comments(request):
  comments = Comment.objects.all()
  serializer = CommentSerializer(comments, many=True)
  return Response(serializer.data)
 
-@api_view(["GET","POST"])
-def post_detail(request,slug):
- post = get_object_or_404(Post,slug=slug)
- if request.method == "GET":
-  serializer = PostSerializer(post)
- elif request.method == "POST":
-  serializer = CommentSerializer(data=request.data)
-  serializer.post = post
-  if serializer.is_valid():
-   serializer.save()
-   return Response(request.data)
- return Response(request.data, status=status.HTTP_200_OK)
-
 @api_view(["POST"])
 def post_comment(request,slug):
  post = get_object_or_404(Post,slug=slug)
+ user = User.objects.get(id=request.user.id)
+ request.data["post"] = post.id
+ request.data["user"] = user.id
  serializer = CommentSerializer(data=request.data)
  if serializer.is_valid():
-  serializer.post = post
   serializer.save()
   data = { "message": "Comment created successfully" }
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(["PUT"])
 def post_edit(request,slug):
@@ -85,34 +80,3 @@ def category(request):
    data = { "message": "Category created successfully" }
    return Response(data, status=status.HTTP_201_CREATED)
   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# def details(request,slug):
-#  form = CommentForm()
-#  obj = get_object_or_404(Post, slug=slug)
-#  if request.user.is_authenticated:
-#   PostView.objects.get_or_create(user=request.user, post=obj)
-#  if request.method == "POST":
-#   form = CommentForm(request.POST)
-#   if form.is_valid():
-#    comment = form.save(commit=False)
-#    comment.user = request.user
-#    comment.post = obj
-#    comment.save()
-#    return redirect("details", slug=slug)
-#  context = {
-#   'object': obj,
-#   'form': form,
-#  } 
-#  return render(request, 'blog/details.html', context)
-
-# @login_required()
-# def like(request, slug):
-#  if request.method == "POST":
-#   obj = get_object_or_404(Post, slug=slug)
-#   like_qs = Like.objects.filter(user=request.user, post=obj)
-#   if like_qs.exists():
-#    like_qs[0].delete()
-#   else:
-#    Like.objects.create(user=request.user, post=obj)
-#   return redirect("details", slug=slug)
-#  return redirect("details", slug=slug)

@@ -1,8 +1,0 @@
-{% extends 'blog/base.html' %}
-{% block content %}
- <form action="" method="POST">
-  {% csrf_token %}
-  {{ post }}
-  <input type="submit" value="DELETE">
- </form>
-{% endblock content %}

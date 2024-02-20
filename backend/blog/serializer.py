@@ -16,6 +16,11 @@ class CommentSerializer(serializers.ModelSerializer):
   model = Comment
   fields = "__all__"
 
+class ViewSerializer(serializers.ModelSerializer):
+ class Meta:
+  model = PostView
+  fields = "__all__"
+
 class PostSerializer(serializers.ModelSerializer):
  comments = CommentSerializer(many=True, read_only=True)
  likes = LikeSerializer(many=True, read_only=True)
