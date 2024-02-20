@@ -10,7 +10,7 @@ const Login = () => {
   }
   const response = axios
    .post("http://localhost:8000/account/login/", data)
-   .then(res => console.log(res))
+   .then(res => localStorage.setItem("token",res.data.token))
    .catch(error => console.log(error))
    console.log(response)
  }

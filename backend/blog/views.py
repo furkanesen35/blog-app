@@ -18,6 +18,8 @@ def get_all_post(request):
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def add_new_post(request):
+ user = User.objects.get(id=request.user.id)
+ request.data["user"] = user.id
  serializer = PostSerializer(data=request.data)
  if serializer.is_valid():
   serializer.save()
@@ -55,12 +57,13 @@ def get_comments(request):
  return Response(serializer.data)
 
 @api_view(["POST"])
-def post_comment(request,slug):
- post = get_object_or_404(Post,slug=slug)
- user = User.objects.get(id=request.user.id)
- request.data["post"] = post.id
- request.data["user"] = user.id
- serializer = CommentSerializer(data=request.data)
+def add_comment(request,slug):
+ data = request.data
+ post_id = get_object_or_404(Post,slug=slug).id
+ user_id = User.objects.get(id=request.user.id).id
+ data["post"] = post_id
+ data["user"] = user_id
+ serializer = CommentSerializer(data=data)
  if serializer.is_valid():
   serializer.save()
   data = { "message": "Comment created successfully" }
