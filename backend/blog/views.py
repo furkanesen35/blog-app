@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
-from .models import Post,Comment,Category
+from .models import Post,Comment,Category,Like,PostView
 from django.contrib.auth.models import User
-from .serializer import PostSerializer,CategorySerializer,CommentSerializer
+from .serializer import PostSerializer,CategorySerializer,CommentSerializer,LikeSerializer,ViewSerializer
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -79,5 +79,43 @@ def add_category(request):
  if serializer.is_valid():
   serializer.save()
   data = { "message": "Category created successfully" }
+  return Response(data, status=status.HTTP_201_CREATED)
+ return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+def get_likes(request):
+ likes = Like.objects.all()
+ serializer = LikeSerializer(likes, many=True)
+ return Response(serializer.data)
+
+@api_view(["POST"])
+def post_like(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ user = User.objects.get(id=request.user.id)
+ request.data["post"] = post.id
+ request.data["user"] = user.id
+ serializer = LikeSerializer(data=request.data)
+ if serializer.is_valid():
+  serializer.save()
+  data = { "message": "Like created successfully" }
+  return Response(data, status=status.HTTP_201_CREATED)
+ return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+def get_views(request):
+ views = PostView.objects.all()
+ serializer = LikeSerializer(views, many=True)
+ return Response(serializer.data)
+
+@api_view(["POST"])
+def post_blog_view(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ user = User.objects.get(id=request.user.id)
+ request.data["post"] = post.id
+ request.data["user"] = user.id
+ serializer = ViewSerializer(data=request.data)
+ if serializer.is_valid():
+  serializer.save()
+  data = { "message": "View created successfully" }
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

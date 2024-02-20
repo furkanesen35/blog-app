@@ -1,5 +1,19 @@
 from django.urls import path
-from .views import get_all_post,add_new_post,post_detail,post_edit,get_categories,get_comments,post_delete,post_comment,add_category
+from .views import (
+ get_all_post,
+ add_new_post,
+ post_detail,
+ post_edit,
+ get_categories,
+ get_comments,
+ post_delete,
+ post_comment,
+ add_category,
+ get_likes,
+ post_like,
+ get_views,
+ post_blog_view
+ )
 
 urlpatterns = [
  path('post/get/', get_all_post, name="get"),
@@ -11,5 +25,8 @@ urlpatterns = [
  path('<str:slug>/post_comment', post_comment, name="post_comment"),
  path('get_categories/', get_categories, name="get_categories"),
  path('add_category/', add_category, name="add_category"),
- # path('<str:slug>/like', like, name="like"),
+ path('get_likes/', get_likes, name="get_likes"),
+ path('<str:slug>/post_like/', post_like, name="post_like"),
+ path('get_views/', get_views, name="get_views"),
+ path('<str:slug>/post_blog_view/', post_blog_view, name="post_blog_view"),
 ]
