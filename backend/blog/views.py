@@ -1,11 +1,11 @@
-from django.shortcuts import render,get_object_or_404
-from django.contrib.auth.models import User
-from .models import Post,Comment,PostView,Like,Category
-from .serializer import PostSerializer,CategorySerializer
-from django.contrib import messages
-from rest_framework.decorators import api_view
+from django.shortcuts import get_object_or_404
+from .models import Post,Comment,Category
+from .serializer import PostSerializer,CategorySerializer,CommentSerializer
+from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(["GET"])
 def get_all_post(request):
@@ -14,6 +14,8 @@ def get_all_post(request):
  return Response(serializer.data)
 
 @api_view(["POST"])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def add_new_post(request):
  serializer = PostSerializer(data=request.data)
  if serializer.is_valid():
@@ -23,10 +25,34 @@ def add_new_post(request):
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
+def get_comments(request):
+ comments = Comment.objects.all()
+ serializer = CommentSerializer(comments, many=True)
+ return Response(serializer.data)
+
+@api_view(["GET","POST"])
 def post_detail(request,slug):
  post = get_object_or_404(Post,slug=slug)
- serializer = PostSerializer(post)
- return Response(serializer.data, status=status.HTTP_200_OK)
+ if request.method == "GET":
+  serializer = PostSerializer(post)
+ elif request.method == "POST":
+  serializer = CommentSerializer(data=request.data)
+  serializer.post = post
+  if serializer.is_valid():
+   serializer.save()
+   return Response(request.data)
+ return Response(request.data, status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+def post_comment(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ serializer = CommentSerializer(data=request.data)
+ if serializer.is_valid():
+  serializer.post = post
+  serializer.save()
+  data = { "message": "Comment created successfully" }
+  return Response(data, status=status.HTTP_201_CREATED)
+ return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["PUT"])
@@ -39,30 +65,13 @@ def post_edit(request,slug):
   return Response(data)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["DELETE"])
+def post_delete(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ post.delete()
+ data = { "message": "Post deleted successfully" }
+ return Response(data)
 
-# @api_view(["GET","PUT","DELETE","PATCH"])
-# def get_update_delete(request,slug):
-#  post = get_object_or_404(Post,slug=slug)
-
-#  elif request.method == "PUT":
-#   serializer = PostSerializer(post, data=request.data)
-#   if serializer.is_valid():
-#    serializer.save()
-#    data = { "message": "Post updated successfully" }
-#    return Response(data)
-#   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#  elif request.method == "PATCH":
-#   serializer = PostSerializer(post, data=request.data, partial=True)
-#   if serializer.is_valid():
-#    serializer.save()
-#    data = { "message": "Post updated successfully1" }
-#    return Response(data)
-#   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#  elif request.method == "DELETE":
-#   post.delete()
-#   data = { "message": "Post deleted successfully" }
-#   return Response(data)
- 
 @api_view(["GET","POST"])
 def category(request):
  categories = Category.objects.all()

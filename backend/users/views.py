@@ -19,7 +19,7 @@ def user_login(request):
  username = request.data.get('username')
  password = request.data.get('password')
  user = authenticate(username=username, password=password)
- if user:
+ if user is not None:
   login(request,user)
   return Response({'message': 'Login successful'})
  else:
