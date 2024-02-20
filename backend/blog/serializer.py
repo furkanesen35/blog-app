@@ -26,4 +26,4 @@ class PostSerializer(serializers.ModelSerializer):
  likes = LikeSerializer(many=True, read_only=True)
  class Meta:
   model = Post
-  fields = ["title","content","category","status","comments","likes"]
+  fields = "__all__"

@@ -25,13 +25,6 @@ def add_new_post(request):
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(["DELETE"])
-def post_delete(request,slug):
- post = get_object_or_404(Post,slug=slug)
- post.delete()
- data = { "message": "Post deleted successfully" }
- return Response(data)
-
 @api_view(["PUT"])
 def post_edit(request,slug):
  post = get_object_or_404(Post,slug=slug)
@@ -41,6 +34,13 @@ def post_edit(request,slug):
   data = { "message": "Post updated successfully" }
   return Response(data)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["DELETE"])
+def post_delete(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ post.delete()
+ data = { "message": "Post deleted successfully" }
+ return Response(data)
 
 @api_view(["GET"])
 def post_detail(request,slug):
