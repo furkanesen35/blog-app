@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
 
 @api_view(["GET"])
 def all_users(request):
@@ -36,3 +38,9 @@ def user_login(request):
    return Response(user, status=status.HTTP_401_UNAUTHORIZED)
  else:
   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+ 
+def get_csrf_token(request):
+ token = get_token(request)
+ response = JsonResponse({"csrfToken":token})
+ response.set_cookie("csrftoken", token, httponly=True)
+ return response

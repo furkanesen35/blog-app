@@ -9,12 +9,21 @@ const Login = () => {
    password: e.target.password.value,
   }
   axios
-   .post("http://localhost:8000/account/login/", data)
-   .then(res => {
-     localStorage.setItem("token", res.data.token);
-     console.log(res);
-   })
-   .catch(error => console.log(error));
+  .post("http://localhost:8000/account/login/", data)
+  .then(res => {
+    // Verify if the response contains a token
+    if (res.data && res.data.TOKEN) {
+      // Set the token in local storage
+      localStorage.setItem("TOKEN", res.data.TOKEN);
+      console.log("TOKEN:", res.data.TOKEN);
+      console.log("message:", res.data.message);
+    } else {
+      console.error("Token not found in response");
+    }
+    const TOKEN = localStorage.getItem("TOKEN");
+    axios.defaults.headers.common["Authorization"] = `Bearer ${TOKEN}`;
+  })
+  .catch(error => console.log(error));
  }
  return (
   <div className='flex flex-col  items-center bg-black h-[100vh] w-[100%]'>
