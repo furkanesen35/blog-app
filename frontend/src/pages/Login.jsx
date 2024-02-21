@@ -8,11 +8,13 @@ const Login = () => {
    username: e.target.username.value,
    password: e.target.password.value,
   }
-  const response = axios
+  axios
    .post("http://localhost:8000/account/login/", data)
-   .then(res => localStorage.setItem("token",res.data.token))
-   .catch(error => console.log(error))
-   console.log(response)
+   .then(res => {
+     localStorage.setItem("token", res.data.token);
+     console.log(res);
+   })
+   .catch(error => console.log(error));
  }
  return (
   <div className='flex flex-col  items-center bg-black h-[100vh] w-[100%]'>
