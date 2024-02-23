@@ -32,7 +32,7 @@ def user_login(request):
   user = authenticate(request, username=username, password=password)
   if user is not None:
    token, created = Token.objects.get_or_create(user=user)
-  #  login(request, user)
+   login(request, user)
    return Response({'message': 'Login successful', "TOKEN": token.key})
   else:
    return Response(user, status=status.HTTP_401_UNAUTHORIZED)
