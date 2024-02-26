@@ -38,9 +38,3 @@ def user_login(request):
    return Response(user, status=status.HTTP_401_UNAUTHORIZED)
  else:
   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
- 
-def get_csrf_token(request):
- token = get_token(request)
- response = JsonResponse({"csrfToken":token})
- response.set_cookie("csrftoken", token, httponly=True)
- return response
