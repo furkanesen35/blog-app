@@ -5,12 +5,12 @@ const AddCategory = () => {
  const submitForm = (e) => {
   e.preventDefault()
   const data = {
-   name: e.target.username.value,
+   name: e.target.name.value,
   }
-  // const response = axios
-  //  .post("http://localhost:8000/categories/", data)
-  //  .then(res => console.log(res))
-  //  .catch(error => console.log(error))
+  const response = axios
+   .post("http://localhost:8000/add_category/", data)
+   .then(res => console.log(res))
+   .catch(error => console.log(error))
    console.log(data);
  }
  return (

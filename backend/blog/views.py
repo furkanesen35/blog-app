@@ -71,7 +71,7 @@ def add_comment(request,slug):
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
-def get_categories(request):
+def get_category(request):
  categories = Category.objects.all()
  serializer = CategorySerializer(categories, many=True)
  return Response(serializer.data)
