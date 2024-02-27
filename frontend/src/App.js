@@ -6,22 +6,27 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AddCategory from "./pages/AddCategory";
 import Post from "./pages/Post";
-import { AuthProvider } from './components/AuthContext';
+import LogoutComponent from "./pages/Logout";
 
 function App() {
  return (
-  <AuthProvider>
-   <BrowserRouter>
-    <Navbar/>
-    <Routes>
-     <Route path="/" element={<Main/>}/>
-     <Route path="/login" element={<Login/>}/>
-     <Route path="/register" element={<Register/>}/>
-     <Route path="/post" element={<Post/>}/>
-     <Route path="/category" element={<AddCategory/>}/>
-    </Routes>
-   </BrowserRouter>
-  </AuthProvider>
+  <BrowserRouter>
+   <Navbar/>
+   <Routes>
+  
+
+      <Route path="/logout" element={<LogoutComponent/>}/>
+      <Route path="/post" element={<Post/>}/>
+      <Route path="/category" element={<AddCategory/>}/>
+      <Route path="/" element={<Main/>}/>
+
+
+      <Route path="/register" element={<Register/>}/>
+      <Route path="/login" element={<Login/>}/>
+
+
+   </Routes>
+  </BrowserRouter>
  );
 }
 

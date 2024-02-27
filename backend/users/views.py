@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(["GET"])
 def all_users(request):
@@ -45,3 +45,16 @@ class CustomTokenObtainPairView(TokenObtainPairView):
   token = response.data["access"]
   response.set_cookie("access_token", token, httponly=True)
   return response
+ 
+@api_view(['POST'])
+def logout(request):
+ try:
+  refresh_token = request.COOKIES.get('refresh_token')
+  if refresh_token is not None:
+   token = RefreshToken(refresh_token)
+   token.blacklist()
+   return Response({'message': 'Logout successful'})
+  else:
+   return Response({'message': 'User not logged in'})
+ except Exception as e:
+  return Response({'message': 'Error logging out'}, status=500)
