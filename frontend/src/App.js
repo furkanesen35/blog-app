@@ -6,10 +6,11 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AddCategory from "./pages/AddCategory";
 import Post from "./pages/Post";
+import { AuthProvider } from './components/AuthContext';
 
 function App() {
  return (
-  <>
+  <AuthProvider>
    <BrowserRouter>
     <Navbar/>
     <Routes>
@@ -20,7 +21,7 @@ function App() {
      <Route path="/category" element={<AddCategory/>}/>
     </Routes>
    </BrowserRouter>
-  </>
+  </AuthProvider>
  );
 }
 
