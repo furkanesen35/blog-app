@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 
 const Post = () => {
@@ -7,31 +7,31 @@ const Post = () => {
  const [categories, setCategories] = useState([]);
  useEffect(() => {
   axios.get('http://localhost:8000/get_category/')
-  .then(response => {
+   .then(response => {
     setCategories(response.data);
-  })
-  .catch(error => {
+   })
+   .catch(error => {
     console.error('Error fetching categories:', error);
-  });
+   });
  }, []);
  const submitForm = (e) => {
-  e.preventDefault()
+  e.preventDefault();
   const data = {
    title: e.target.title.value,
    content: e.target.content.value,
    status: e.target.status.value,
    category: e.target.category.value,
-  }
-  const response = axios
-   .post("http://localhost:8000/post/add/", data,{
-    headers: {
-     Authorization: `Bearer ${userToken}`
-    }
-   })
+  };
+  const csrftoken = getCookie('csrftoken'); // Function to retrieve CSRF token
+  const headers = {
+   'Content-Type': 'application/json',
+   'X-CSRFToken': csrftoken,
+   Authorization: `Bearer ${userToken}`,
+  };
+  axios.post("http://localhost:8000/post/add/", data, { headers })
    .then(res => console.log(res))
-   .catch(error => console.log(error))
-   console.log(response)
- }
+   .catch(error => console.log(error));
+ };
  return (
   <div className='flex justify-center'>
    <form className='flex flex-col' action="" method='POST' onSubmit={submitForm}>
@@ -47,13 +47,18 @@ const Post = () => {
     <label htmlFor="category">Category</label>
     <select name="category" id="category">
      {categories.map((category, index) => (
-      <option key={index} value={category.id}>{category.name}</option>
+       <option key={index} value={category.id}>{category.name}</option>
      ))}
     </select>
     <input type="submit" />
    </form>
   </div>
- )
+ );
 }
 
-export default Post
+function getCookie(name) {
+ const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+ return cookieValue ? cookieValue.pop() : '';
+}
+
+export default Post;

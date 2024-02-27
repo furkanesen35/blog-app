@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication,BasicAuthentication,TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.csrf import csrf_exempt
 
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -16,9 +17,10 @@ def get_all_post(request):
  serializer = PostSerializer(posts, many=True)
  return Response(serializer.data)
 
-@api_view(["POST"])
+@csrf_exempt
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
+@api_view(["POST"])
 def add_new_post(request):
  user = User.objects.get(id=request.user.id)
  request.data["user"] = user.id
