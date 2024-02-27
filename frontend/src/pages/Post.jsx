@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
-
-function getCookie(name) {
-  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-  return cookieValue ? cookieValue.pop() : '';
-}
+import { UserContext } from '../context/UserContext';
 
 const Post = () => {
- const csrfToken = getCookie('csrftoken');
+ const { userToken } = useContext(UserContext);
  const [categories, setCategories] = useState([]);
  useEffect(() => {
-  axios.get('http://localhost:8000/categories/')
+  axios.get('http://localhost:8000/get_category/')
   .then(response => {
     setCategories(response.data);
   })
@@ -29,9 +25,9 @@ const Post = () => {
   const response = axios
    .post("http://localhost:8000/post/add/", data,{
     headers: {
-      'X-CSRFToken': csrfToken
+     Authorization: `Bearer ${userToken}`
     }
-  })
+   })
    .then(res => console.log(res))
    .catch(error => console.log(error))
    console.log(response)

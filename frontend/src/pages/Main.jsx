@@ -1,20 +1,25 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { UserContext } from '../context/UserContext';
 
 const Main = () => {
+ const { userToken } = useContext(UserContext);
  const [data, setData] = useState([])
  useEffect(() => {
   const fetchedData = async () => {
    try {
-    const response = await axios.get("http://localhost:8000/")
-    // console.log(response.data);
+    const response = await axios.get("http://localhost:8000/post/get/", {
+     headers: {
+      Authorization: `Bearer ${userToken}`
+     }
+    })
     setData(response.data)
    } catch (error) {
     console.log(error);
    }
   }
   fetchedData()
- }, [])
+ }, [userToken])
  return (
   <div className='flex justify-center bg-black h-[100vh] text-white'>
    <ul>

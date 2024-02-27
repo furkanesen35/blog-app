@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { UserContext } from '../context/UserContext';
 
 const Navbar = () => {
- const { userToken, loginUser, logoutUser } = useContext(UserContext);
+ const { userToken } = useContext(UserContext);
  return (
   <div className="flex justify-center bg-gray-800 text-white py-4 px-6 sticky top-0 w-full z-10">
    <div className='flex justify-between w-[700px]'>
