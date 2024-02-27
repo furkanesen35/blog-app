@@ -11,8 +11,8 @@ const Navbar = () => {
     { userToken ? 
      <>
       <Link className="border border-blue-500 text-blue-500 hover:text-orange-400 hover:border-orange-400 font-bold py-2 px-4 rounded" to="/post">Post</Link>
-      <Link className="border border-blue-500 text-blue-500 hover:text-orange-400 hover:border-orange-400 font-bold py-2 px-4 rounded" to="/logout">Logout</Link>
       <Link className="border border-blue-500 text-blue-500 hover:text-orange-400 hover:border-orange-400 font-bold py-2 px-4 rounded" to="/category">Add Category</Link>
+      <Link className="border border-blue-500 text-blue-500 hover:text-orange-400 hover:border-orange-400 font-bold py-2 px-4 rounded" to="/logout">Logout</Link>
      </> :
      <>
       <Link className="border border-blue-500 text-blue-500 hover:text-orange-400 hover:border-orange-400 font-bold py-2 px-4 rounded" to="/login">Login</Link>
