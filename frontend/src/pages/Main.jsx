@@ -5,14 +5,21 @@ import { UserContext } from '../context/UserContext';
 const Main = () => {
  const { userToken } = useContext(UserContext);
  const [data, setData] = useState([])
+ function getCookie(name) {
+  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  console.log(cookieValue);
+  return cookieValue ? cookieValue.pop() : '';
+ }
+ const csrftoken = getCookie('csrftoken');
+ const headers = {
+  'Content-Type': 'application/json',
+  'X-CSRFToken': csrftoken,
+  Authorization: `Bearer ${userToken}`,
+ };
  useEffect(() => {
   const fetchedData = async () => {
    try {
-    const response = await axios.get("http://localhost:8000/post/get/", {
-     headers: {
-      Authorization: `Bearer ${userToken}`
-     }
-    })
+    const response = await axios.get("http://localhost:8000/post/get/", { headers })
     setData(response.data)
    } catch (error) {
     console.log(error);
