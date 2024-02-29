@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
 
 @api_view(["GET"])
 def all_users(request):
@@ -58,3 +60,8 @@ def logout(request):
    return Response({'message': 'User not logged in'})
  except Exception as e:
   return Response({'message': 'Error logging out'}, status=500)
+ 
+
+def get_csrf_token(request):
+ csrf_token = get_token(request)
+ return JsonResponse({'csrf_token': csrf_token})

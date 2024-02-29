@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import register,user_login,all_users,logout
+from .views import register,user_login,all_users,logout,get_csrf_token
 from rest_framework_simplejwt.views import (
  TokenObtainPairView,
  TokenRefreshView,
@@ -12,4 +12,5 @@ urlpatterns = [
  path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
  path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
  path('api/logout/', logout, name='logout'),
+ path('csrf_token', get_csrf_token, name='csrf_token'),
 ]
