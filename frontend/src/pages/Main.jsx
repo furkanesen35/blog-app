@@ -5,17 +5,20 @@ import { UserContext } from '../context/UserContext';
 const Main = () => {
  const { userToken } = useContext(UserContext);
  const [data, setData] = useState([])
+
  function getCookie(name) {
   const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-  console.log(cookieValue);
   return cookieValue ? cookieValue.pop() : '';
  }
+ 
  const csrftoken = getCookie('csrftoken');
+
  const headers = {
   'Content-Type': 'application/json',
   'X-CSRFToken': csrftoken,
   Authorization: `Bearer ${userToken}`,
  };
+
  useEffect(() => {
   const fetchedData = async () => {
    try {
@@ -26,6 +29,7 @@ const Main = () => {
    }
   }
   fetchedData()
+  console.log(headers);
  }, [userToken])
  return (
   <div className='flex justify-center bg-black h-[100vh] text-white'>

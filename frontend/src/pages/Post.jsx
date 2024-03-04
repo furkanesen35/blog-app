@@ -5,7 +5,19 @@ import { UserContext } from '../context/UserContext';
 const Post = () => {
  const { userToken } = useContext(UserContext);
  const [categories, setCategories] = useState([]);
- const [csrfToken, setCsrfToken] = useState('');
+
+ function getCookie(name) {
+  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return cookieValue ? cookieValue.pop() : '';
+ }
+
+ const csrftoken = getCookie('csrftoken');
+ 
+ const headers = {
+  'Content-Type': 'application/json',
+  'X-CSRFToken': csrftoken,
+  Authorization: `Bearer ${userToken}`,
+ };
 
  useEffect(() => {
   axios.get('http://localhost:8000/get_category/')
@@ -16,13 +28,9 @@ const Post = () => {
     console.error('Error fetching categories:', error);
    });
 
-  axios.get('http://127.0.0.1:8000/account/csrf_token')
-  //  .then(res => console.log(res.data.csrf_token))
-   .then(res => setCsrfToken(res.data.csrf_token))
-   .catch(error => console.error('Error fetching CSRF token:', error));
   }, []);
 
- const submitForm = (e) => {
+  const submitForm = (e) => {
   e.preventDefault();
 
   const data = {
@@ -30,12 +38,6 @@ const Post = () => {
    content: e.target.content.value,
    status: e.target.status.value,
    category: e.target.category.value,
-  };
-
-  const headers = {
-   'Content-Type': 'application/json',
-   'X-CSRFToken': csrfToken,
-   'Authorization': `Bearer ${userToken}`
   };
 
   axios.post("http://localhost:8000/post/add/", data, { headers })

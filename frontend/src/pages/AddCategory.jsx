@@ -11,7 +11,6 @@ const AddCategory = () => {
    .post("http://localhost:8000/add_category/", data)
    .then(res => console.log(res))
    .catch(error => console.log(error))
-   console.log(data);
  }
  return (
   <div>
