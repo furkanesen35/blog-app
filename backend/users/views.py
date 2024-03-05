@@ -44,8 +44,16 @@ def user_login(request):
 class CustomTokenObtainPairView(TokenObtainPairView):
  def post(self, request, *args, **kwargs):
   response = super().post(request, *args, **kwargs)
-  token = response.data["access"]
-  response.set_cookie("access_token", token, httponly=True)
+  serializer = LoginSerializer(data=request.data)
+  if serializer.is_valid():
+   username = serializer.validated_data.get('username')
+   password = serializer.validated_data.get('password')
+   user = authenticate(request, username=username, password=password)
+   if user is not None:
+    login(request, user)
+    token = response.data["access"]
+    return Response({'message': 'Login successful', "TOKEN": token.key})
+   response.set_cookie("access_token", token, httponly=True)
   return response
  
 @api_view(['POST'])

@@ -16,7 +16,7 @@ const Post = () => {
  const headers = {
   'Content-Type': 'application/json',
   'X-CSRFToken': csrftoken,
-  Authorization: `Bearer ${userToken}`,
+  Authorization : `Bearer ${userToken}`,
  };
 
  useEffect(() => {
@@ -27,10 +27,9 @@ const Post = () => {
    .catch(error => {
     console.error('Error fetching categories:', error);
    });
+ },[]);
 
-  }, []);
-
-  const submitForm = (e) => {
+ const submitForm = (e) => {
   e.preventDefault();
 
   const data = {
@@ -40,13 +39,14 @@ const Post = () => {
    category: e.target.category.value,
   };
 
-  axios.post("http://localhost:8000/post/add/", data, { headers })
+  axios.post("http://localhost:8000/post/add/", data, {headers} )
    .then(res => console.log(res))
    .catch(error => {
     console.error('Error submitting post:', error);
-    // Handle error gracefully, e.g., display an error message to the user
    });
  };
+
+//  console.log(headers);
 
  return (
   <div className='flex justify-center'>
@@ -61,9 +61,9 @@ const Post = () => {
      <option value="p">Published</option>
     </select>
     <label htmlFor="category">Category</label>
-    <select name="category" id="category">
+    <select name="category" id="category" >
      {categories.map((category, index) => (
-      <option key={index} value={category.id}>{category.name}</option>
+      <option key={category.id} value={index+1}>{category.name}</option>
      ))}
     </select>
     <input type="submit" />
