@@ -8,6 +8,7 @@ import AddCategory from "./pages/AddCategory";
 import Post from "./pages/Post";
 import LogoutComponent from "./pages/Logout";
 import React from 'react';
+import PostDetail from "./pages/PostDetail";
 
 function App() {
  return (
@@ -20,6 +21,7 @@ function App() {
      <Route path="/" element={<Main/>}/>
      <Route path="/register" element={<Register/>}/>
      <Route path="/login" element={<Login/>}/>
+     <Route path="/detail" element={<PostDetail/>}/>
    </Routes>
   </BrowserRouter>
  );

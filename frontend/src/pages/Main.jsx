@@ -29,17 +29,17 @@ const Main = () => {
    }
   }
   fetchedData()
-  console.log(headers);
  }, [userToken])
+
  return (
   <div className='flex justify-center bg-black h-[100vh] text-white'>
    <ul>
     {data.map((post, index) => (
      <li key={index} className='flex flex-col justify-center items-center h-[300px] w-[300px]'>
-      <div>Title: {post.title}</div>
+      <a href="/detail"><div>Title: {post.title}</div></a>
       <div>Content: {post.content}</div>
-      <div>Category: {post.category}</div>
-      {post.comments.length ? <div>Comments: {post.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
+      <div>Category: {post.category?.name}</div>
+       {post.comments.length ? <div>Comments: {post.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
       <div>Likes: {post.likes.length}</div>
      </li>
     ))}

@@ -36,17 +36,14 @@ const Post = () => {
    title: e.target.title.value,
    content: e.target.content.value,
    status: e.target.status.value,
-   category: e.target.category.value,
+   category: {id:e.target.category.value, name:e.target.category.value2},
   };
 
   axios.post("http://localhost:8000/post/add/", data, {headers} )
-   .then(res => console.log(res))
    .catch(error => {
     console.error('Error submitting post:', error);
    });
  };
-
-//  console.log(headers);
 
  return (
   <div className='flex justify-center'>
@@ -63,7 +60,7 @@ const Post = () => {
     <label htmlFor="category">Category</label>
     <select name="category" id="category" >
      {categories.map((category, index) => (
-      <option key={category.id} value={index+1}>{category.name}</option>
+      <option key={index} value={category.id} value2={category.name}>{category.name} {category.id}</option>
      ))}
     </select>
     <input type="submit" />

@@ -4,7 +4,7 @@ from .models import Post,PostView,Category,Like,Comment
 class CategorySerializer(serializers.ModelSerializer):
  class Meta:
   model = Category
-  fields = ["name"]
+  fields = "__all__"
 
 class LikeSerializer(serializers.ModelSerializer):
  class Meta:
@@ -24,6 +24,7 @@ class ViewSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
  comments = CommentSerializer(many=True, read_only=True)
  likes = LikeSerializer(many=True, read_only=True)
+ category = CategorySerializer(read_only=True)
  class Meta:
   model = Post
   fields = "__all__"

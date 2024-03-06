@@ -5,9 +5,8 @@ from .serializer import PostSerializer,CategorySerializer,CommentSerializer,Like
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication,BasicAuthentication,TokenAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from django.views.decorators.csrf import csrf_exempt
 
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -17,7 +16,6 @@ def get_all_post(request):
  serializer = PostSerializer(posts, many=True)
  return Response(serializer.data)
 
-# @csrf_exempt
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 @api_view(["POST"])
@@ -25,7 +23,6 @@ def add_new_post(request):
  user = User.objects.get(id=request.user.id)
  userid = str(user.id)
  request.data["author"] = userid
- print(request.data)
  serializer = PostSerializer(data=request.data)
  if serializer.is_valid():
   serializer.save()
