@@ -46,21 +46,21 @@ const Post = () => {
  };
 
  return (
-  <div className='flex justify-center'>
-   <form className='flex flex-col' action="" method='POST' onSubmit={submitForm}>
+  <div className='flex justify-center bg-black h-[100vh] text-white'>
+   <form className='flex flex-col w-[300px]' action="" method='POST' onSubmit={submitForm} >
     <label htmlFor="title">Title</label>
-    <input type="text" name='title' id='title' />
+    <input type="text" name='title' id='title' className='text-black' />
     <label htmlFor="content">Content</label>
-    <textarea name="content" id="content" cols="30" rows="10" />
+    <textarea name="content" id="content" cols="30" rows="10" className='text-black' />
     <label htmlFor="status">Status</label>
-    <select name="status" id="status">
-     <option value="d">Draft</option>
-     <option value="p">Published</option>
+    <select name="status" id="status" className='text-black'>
+     <option value="d" className='text-black'>Draft</option>
+     <option value="p" className='text-black'>Published</option>
     </select>
     <label htmlFor="category">Category</label>
-    <select name="category" id="category" >
+    <select name="category" id="category" className='text-black' >
      {categories.map((category, index) => (
-      <option key={index} value={category.id} value2={category.name}>{category.name} {category.id}</option>
+      <option key={index} value={category.id} className='text-black' value2={category.name}>{category.name} {category.id}</option>
      ))}
     </select>
     <input type="submit" />

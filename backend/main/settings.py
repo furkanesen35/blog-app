@@ -1,5 +1,6 @@
 from pathlib import Path
 from decouple import config
+from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -101,4 +102,8 @@ REST_FRAMEWORK = {
 
 AUTHENTICATION_BACKENDS = {
  "django.contrib.auth.backends.ModelBackend"
+}
+
+SIMPLE_JWT = {
+ 'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
 }

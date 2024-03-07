@@ -7,10 +7,24 @@ import Register from "./pages/Register";
 import AddCategory from "./pages/AddCategory";
 import Post from "./pages/Post";
 import LogoutComponent from "./pages/Logout";
-import React from 'react';
-import PostDetail from "./pages/PostDetail";
+import React, { useEffect, useState } from 'react';
+import PostEdit from "./pages/PostEdit";
+import axios from "axios";
 
 function App() {
+ const [data, setData] = useState([]) 
+ useEffect(() => {
+  const fetchedData = async () => {
+   try {
+    const response = await axios.get("http://localhost:8000/post/get/")
+    setData(response.data)
+   } catch (error) {
+    console.log(error);
+   }
+  }
+  fetchedData()
+ }, [])
+ 
  return (
   <BrowserRouter>
    <Navbar/>
@@ -21,10 +35,12 @@ function App() {
      <Route path="/" element={<Main/>}/>
      <Route path="/register" element={<Register/>}/>
      <Route path="/login" element={<Login/>}/>
-     <Route path="/detail" element={<PostDetail/>}/>
+     {data.map((post, index) => {
+       return <Route key={index} path={`/detail/${post.slug}`} element={<PostEdit slug={post.slug} />}/>
+     })}
    </Routes>
   </BrowserRouter>
  );
 }
 
-export default App; 
+export default App;

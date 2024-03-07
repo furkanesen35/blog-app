@@ -30,6 +30,8 @@ def add_new_post(request):
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(["PUT"])
 def post_edit(request,slug):
  post = get_object_or_404(Post,slug=slug)
@@ -59,13 +61,16 @@ def get_comments(request):
  serializer = CommentSerializer(comments, many=True)
  return Response(serializer.data)
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(["POST"])
 def add_comment(request,slug):
  data = request.data
- post_id = get_object_or_404(Post,slug=slug).id
- user_id = User.objects.get(id=request.user.id).id
+ user = User.objects.get(id=request.user.id)
+ userid = str(user.id)
+ post_id = str(get_object_or_404(Post,slug=slug).id)
  data["post"] = post_id
- data["user"] = user_id
+ data["user"] = userid
  serializer = CommentSerializer(data=data)
  if serializer.is_valid():
   serializer.save()
