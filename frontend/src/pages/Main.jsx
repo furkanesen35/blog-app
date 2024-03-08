@@ -33,7 +33,7 @@ const Main = () => {
 
  return (
   <>{userToken ? 
-   <div className='flex justify-center bg-black h-[1000vh] text-white'>
+   <div className='flex justify-center bg-black h-[100vh] text-white'>
     <ul>
      {data.map((post, index) => (
       <li key={index} className='flex flex-col justify-center items-center h-[300px] w-[300px]'>

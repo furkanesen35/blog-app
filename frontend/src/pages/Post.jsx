@@ -46,7 +46,10 @@ const Post = () => {
  };
 
  return (
-  <div className='flex justify-center bg-black h-[100vh] text-white'>
+  <div className='flex flex-col items-center bg-black h-[100vh] text-white'>
+   <div>
+    Post your pictures
+   </div>
    <form className='flex flex-col w-[300px]' action="" method='POST' onSubmit={submitForm} >
     <label htmlFor="title">Title</label>
     <input type="text" name='title' id='title' className='text-black' />
