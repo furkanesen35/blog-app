@@ -13,7 +13,7 @@ const AddCategory = () => {
    .catch(error => console.log(error))
  }
  return (
-  <div>
+  <div className='flex items-start justify-center bg-black h-[100vh] text-white'>
    <form action="" onSubmit={submitForm}>
     <label htmlFor="name">Category Name:</label>
     <input type="text" id='name' name='name' placeholder='name'/>

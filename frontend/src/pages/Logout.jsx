@@ -14,7 +14,7 @@ const LogoutComponent = () => {
   }
  };
  return (
-  <div>
+  <div className='flex items-start justify-center bg-black h-[100vh] text-white'>
    <button onClick={handleLogout}>Logout</button>
   </div>
  );

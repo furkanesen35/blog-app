@@ -29,23 +29,32 @@ const Main = () => {
    }
   }
   fetchedData()
- }, [userToken])
+ }, [])
 
  return (
-  <div className='flex justify-center bg-black h-[100vh] text-white'>
-   <ul>
-    {data.map((post, index) => (
-     <li key={index} className='flex flex-col justify-center items-center h-[300px] w-[300px]'>
-      <a href={`/detail/${post.slug}`}><div>Title: {post.title}</div></a>
-      <div>Content: {post.content}</div>
-      <div>Category: {post.category?.name}</div>
-       {post.comments.length ? <div>Comments: {post.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
-      <div>Likes: {post.likes.length}</div>
-      <div>Slug: {post.slug}</div>
-     </li>
-    ))}
-   </ul>
-  </div>
+  <>{userToken ? 
+   <div className='flex justify-center bg-black h-[1000vh] text-white'>
+    <ul>
+     {data.map((post, index) => (
+      <li key={index} className='flex flex-col justify-center items-center h-[300px] w-[300px]'>
+       <a href={`/detail/${post.slug}`}><div>Title: {post.title}</div></a>
+       <div>Content: {post.content}</div>
+       <div>Category: {post.category?.name}</div>
+        {post.comments.length ? <div>Comments: {post.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
+       <div>Likes: {post.likes.length}</div>
+       <div>Slug: {post.slug}</div>
+      </li>
+     ))}
+    </ul>
+   </div> : 
+   <div className='flex justify-center bg-black h-[1000vh] text-white'>
+    Please
+    <a href="/login">
+     Login
+    </a>
+   </div>
+  }
+  </>
  )
 }
 
