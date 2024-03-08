@@ -1,12 +1,16 @@
-import React, { useContext } from 'react'
-import { UserContext } from '../context/UserContext';
+import React,{useState} from 'react'
 
 const Profile = () => {
- const { userToken } = useContext(UserContext);
- console.log(userToken);
- const submitProfile = () => {
-  return
+ const [user, setUser] = useState("")
+ const submitProfile = (e) => {
+  e.preventDefault()
+  const data = {
+   username: e.target.username.value,
+   password: e.target.password.value,
+  }
+  setUser(data)
  }
+ console.log(user);
  return (
   <div className='flex flex-col items-center bg-black h-[100vh] text-white'>
    <p>Change your profile settings</p>
@@ -20,7 +24,7 @@ const Profile = () => {
      <input type="password" name='password' className='text-black'/>
     </div>
     <div className='flex justify-center'>
-     <input type="submit" />
+     <input type="submit" className='cursor-pointer'/>
     </div>
     </form>
   </div>
