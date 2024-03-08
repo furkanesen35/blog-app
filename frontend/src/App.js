@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import './App.css';
-import Navbar from './components/Navbar';
+import LeftSideBar from './components/LeftSideBar';
 import Main from "./pages/Main";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -10,6 +10,7 @@ import LogoutComponent from "./pages/Logout";
 import React, { useEffect, useState } from 'react';
 import PostEdit from "./pages/PostEdit";
 import axios from "axios";
+import RightSideBar from "./components/RightSideBar";
 
 function App() {
  const [data, setData] = useState([]) 
@@ -27,7 +28,8 @@ function App() {
  
  return (
   <BrowserRouter>
-   <Navbar/>
+   <LeftSideBar/>
+   <RightSideBar/>
    <Routes>
      <Route path="/logout" element={<LogoutComponent/>}/>
      <Route path="/post" element={<Post/>}/>
