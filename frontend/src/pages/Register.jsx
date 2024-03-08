@@ -16,11 +16,12 @@ const Register = () => {
    console.log(response)
  }
  return (
-  <div>
-   <form action="" onSubmit={submitForm}>
-    <input type="text" name='username' placeholder='username'/>
-    <input type="email" name='email' placeholder='email' />
-    <input type="password" name='password' placeholder='password' />
+  <div className='flex flex-col items-center bg-black h-[100vh] text-white'>
+   Register form
+   <form action="" onSubmit={submitForm} className='flex flex-col'>
+    <input type="text" name='username' placeholder='username' className='text-black'/>
+    <input type="email" name='email' placeholder='email' className='text-black'/>
+    <input type="password" name='password' placeholder='password' className='text-black'/>
     <button type='submit'>Submit</button>
    </form>
   </div>
