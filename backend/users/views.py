@@ -1,14 +1,15 @@
 from django.contrib.auth import authenticate,login
-from .serializers import RegisterSerializer,LoginSerializer
-from rest_framework.decorators import api_view
+from .serializers import RegisterSerializer,LoginSerializer,UserSerializer
+from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import JsonResponse
-from django.middleware.csrf import get_token
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 @api_view(["GET"])
 def all_users(request):
@@ -24,6 +25,27 @@ def register(request):
   data = { "message" : f"Student {serializer.validated_data.get("username")} saved successfully!"}
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+class ChangeUserInfoAndPassword(APIView):
+ def put(self, request):
+  user = request.user
+  data = request.data
+  serializer = UserSerializer(user, data=data, partial=True)
+  if serializer.is_valid():
+   if 'old_password' in data:
+    old_password = data.pop('old_password')
+    if not user.check_password(old_password):
+     return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+    new_password = data.get('new_password')
+    confirm_password = data.get('confirm_password')
+    if new_password != confirm_password:
+     return Response({"confirm_password": ["Passwords do not match."]}, status=status.HTTP_400_BAD_REQUEST)
+    user.set_password(new_password)
+   serializer.save()
+   return Response(serializer.data)
+  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLogin(TokenObtainPairView):
  def post(self, request, *args, **kwargs):
@@ -52,8 +74,3 @@ def logout(request):
    return Response({'message': 'User not logged in'})
  except Exception as e:
   return Response({'message': 'Error logging out'}, status=500)
- 
-
-def get_csrf_token(request):
- csrf_token = get_token(request)
- return JsonResponse({'csrf_token': csrf_token})
