@@ -48,7 +48,7 @@ const PostEdit = ({ slug }) => {
    title: e.target.title.value,
    content: e.target.content.value,
    status: e.target.status.value,
-   category: {id:e.target.category.value, name:e.target.category.value2},
+   category: e.target.category.value,
   };
  
   axios.put(`http://localhost:8000/${slug}/post_edit`, data, {headers} )
@@ -71,7 +71,6 @@ const PostEdit = ({ slug }) => {
    .catch(error => {
     console.error('Error submitting post:', error);
    });
-  // console.log(comment);
  };
  // comment part
 
@@ -90,9 +89,9 @@ const PostEdit = ({ slug }) => {
        <option value="p" className='text-black'>Published</option>
       </select>
       <label htmlFor="category">Category</label>
-      <select name="category" id="category" value={data.category} className='text-black'>
+      <select name="category" id="category" className='text-black'>
        {categories.map((category, index) => (
-        <option key={index} value={category.id} className='text-black' value2={category.name}>{category.name} {category.id}</option>
+        <option key={index} value={category.id} className='text-black'>{category.name}</option>
        ))}
       </select>
       <input type="submit"/>
@@ -101,9 +100,9 @@ const PostEdit = ({ slug }) => {
     <div className='flex flex-col items-center bg-black h-[100vh] text-white'>
      <div>Title: {data.title}</div>
      <div>Content: {data.content}</div>
-     {/* <div>Category: {data.category?.name}</div>
+     <div>Category: {data.category}</div>
       {data.comments.length ? <div>Comments: {data.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
-     <div>Likes: {data.likes.length}</div> */}
+     <div>Likes: {data.likes.length}</div>
      <div>
       Leave a comment:
       <form action="" className='flex flex-col text-black' onSubmit={submitComment}>

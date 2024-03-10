@@ -17,10 +17,4 @@ class LoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
  class Meta:
   model = User
-  fields = ['username', 'password']  # Add other fields as needed
-  extra_kwargs = {'password': {'write_only': True}}
- def update(self, instance, validated_data):
-  instance.username = validated_data.get('username', instance.username)
-  instance.set_password(validated_data.get('password', instance.password))
-  instance.save()
-  return instance
+  fields = "__all__"

@@ -30,12 +30,19 @@ def add_new_post(request):
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["GET"])
+def post_detail(request,slug):
+ post = get_object_or_404(Post,slug=slug)
+ serializer = PostSerializer(post)
+ return Response(serializer.data, status=status.HTTP_200_OK)
+
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 @api_view(["PUT"])
 def post_edit(request,slug):
  post = get_object_or_404(Post,slug=slug)
  serializer = PostSerializer(post, data=request.data, partial=True)
+ print(request.data)
  if serializer.is_valid():
   serializer.save()
   data = { "message": "Post updated successfully" }
@@ -48,12 +55,6 @@ def post_delete(request,slug):
  post.delete()
  data = { "message": "Post deleted successfully" }
  return Response(data)
-
-@api_view(["GET"])
-def post_detail(request,slug):
- post = get_object_or_404(Post,slug=slug)
- serializer = PostSerializer(post)
- return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 def get_comments(request):
