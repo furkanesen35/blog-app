@@ -26,26 +26,15 @@ def register(request):
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-class ChangeUserInfoAndPassword(APIView):
- def put(self, request):
-  user = request.user
-  data = request.data
-  serializer = UserSerializer(user, data=data, partial=True)
-  if serializer.is_valid():
-   if 'old_password' in data:
-    old_password = data.pop('old_password')
-    if not user.check_password(old_password):
-     return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
-    new_password = data.get('new_password')
-    confirm_password = data.get('confirm_password')
-    if new_password != confirm_password:
-     return Response({"confirm_password": ["Passwords do not match."]}, status=status.HTTP_400_BAD_REQUEST)
-    user.set_password(new_password)
-   serializer.save()
-   return Response(serializer.data)
-  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(["PUT"])
+def ChangeUserInfoAndPassword(request):
+ user = request.user
+ serializer = UserSerializer(user, data=request.data, partial=True)
+ if serializer.is_valid():
+  serializer.save()
+  return Response({'message': 'User information updated successfully'})
+ return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserLogin(TokenObtainPairView):
  def post(self, request, *args, **kwargs):

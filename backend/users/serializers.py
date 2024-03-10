@@ -15,9 +15,12 @@ class LoginSerializer(serializers.Serializer):
  password = serializers.CharField()
 
 class UserSerializer(serializers.ModelSerializer):
- old_password = serializers.CharField(write_only=True, required=False)
- new_password = serializers.CharField(write_only=True, required=False)
- confirm_password = serializers.CharField(write_only=True, required=False)
  class Meta:
   model = User
-  fields = ['username', 'email', 'old_password', 'new_password', 'confirm_password']
+  fields = ['username', 'password']  # Add other fields as needed
+  extra_kwargs = {'password': {'write_only': True}}
+ def update(self, instance, validated_data):
+  instance.username = validated_data.get('username', instance.username)
+  instance.set_password(validated_data.get('password', instance.password))
+  instance.save()
+  return instance
