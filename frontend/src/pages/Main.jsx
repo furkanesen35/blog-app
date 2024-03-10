@@ -5,6 +5,17 @@ import { UserContext } from '../context/UserContext';
 const Main = () => {
  const { userToken } = useContext(UserContext);
  const [data, setData] = useState([])
+ const [categories, setCategories] = useState([]);
+
+ useEffect(() => {
+  axios.get('http://localhost:8000/get_category/')
+   .then(response => {
+    setCategories(response.data);
+   })
+   .catch(error => {
+    console.error('Error fetching categories:', error);
+   });
+ },[]);
 
  function getCookie(name) {
   const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
@@ -31,8 +42,8 @@ const Main = () => {
   if (userToken) {
    fetchedData()
   }
- }, [headers])
-
+ }, [userToken])
+ 
  return (
   <>{userToken ? 
    <div className='flex justify-center bg-black text-white'>
@@ -41,7 +52,7 @@ const Main = () => {
       <li key={index} className='flex flex-col justify-center items-center h-[300px] w-[300px]'>
        <a href={`/detail/${post.slug}`}><div>Title: {post.title}</div></a>
        <div>Content: {post.content}</div>
-       <div>Category: {post.category?.name}</div>
+       <div>Category: {categories.map(category => category.id === post.category ? category.name : null) }</div>
         {post.comments.length ? <div>Comments: {post.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
        <div>Likes: {post.likes.length}</div>
        <div>Slug: {post.slug}</div>

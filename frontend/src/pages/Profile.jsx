@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 
 const Profile = () => {
  const [user, setUser] = useState("")
+
  const submitProfile = (e) => {
   e.preventDefault()
   const data = {

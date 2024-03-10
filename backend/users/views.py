@@ -35,7 +35,6 @@ def ChangeUserInfoAndPassword(request):
   return Response({'message': 'User information updated successfully'})
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class UserLogin(TokenObtainPairView):
  def post(self, request, *args, **kwargs):
   response = super().post(request, *args, **kwargs)
