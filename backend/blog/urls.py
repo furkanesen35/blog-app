@@ -13,7 +13,7 @@ from .views import (
  post_like,
  get_views,
  post_blog_view
- )
+)
 
 urlpatterns = [
  path('post/get/', get_all_post, name="get"),

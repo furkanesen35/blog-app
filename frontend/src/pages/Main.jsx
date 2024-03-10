@@ -12,7 +12,7 @@ const Main = () => {
  }
  
  const csrftoken = getCookie('csrftoken');
-
+ 
  const headers = {
   'Content-Type': 'application/json',
   'X-CSRFToken': csrftoken,
@@ -28,12 +28,14 @@ const Main = () => {
     console.log(error);
    }
   }
-  fetchedData()
- }, [])
+  if (userToken) {
+   fetchedData()
+  }
+ }, [headers])
 
  return (
   <>{userToken ? 
-   <div className='flex justify-center bg-black h-[100vh] text-white'>
+   <div className='flex justify-center bg-black text-white'>
     <ul>
      {data.map((post, index) => (
       <li key={index} className='flex flex-col justify-center items-center h-[300px] w-[300px]'>

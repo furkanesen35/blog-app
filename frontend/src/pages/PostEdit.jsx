@@ -77,7 +77,7 @@ const PostEdit = ({ slug }) => {
 
  return (
   <>
-   {!userToken ? 
+   {userToken ? 
     <div className='flex justify-center bg-black h-[100vh] text-white'>
      <form className='flex flex-col w-[300px]' action="" method='POST' onSubmit={submitChanges}>
       <label htmlFor="title">Title</label>
