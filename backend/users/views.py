@@ -18,12 +18,6 @@ def all_users(request):
  serializer = RegisterSerializer(users, many=True)
  return Response(serializer.data)
 
-@api_view(["GET"])
-def get_user_profile(request,id):
- user = get_object_or_404(User, id=id)
- serializer = UserSerializer(user)
- return Response(serializer.data, status=status.HTTP_200_OK)
-
 @api_view(["POST"])
 def register(request):
  serializer = RegisterSerializer(data=request.data)
@@ -33,14 +27,27 @@ def register(request):
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["GET"])
+def get_user_profile(request,id):
+ user = get_object_or_404(User, id=id)
+ serializer = UserSerializer(user)
+ return Response(serializer.data, status=status.HTTP_200_OK)
+
 @api_view(["PUT"])
-def ChangeUserInfoAndPassword(request):
- user = request.user
+def ChangeUserInfoAndPassword(request,id):
+ user = get_object_or_404(User, id=id)
  serializer = UserSerializer(user, data=request.data, partial=True)
  if serializer.is_valid():
   serializer.save()
   return Response({'message': 'User information updated successfully'})
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#  user = request.user
+#  serializer = UserSerializer(user, data=request.data, partial=True)
+#  if serializer.is_valid():
+#   serializer.save()
+#   return Response({'message': 'User information updated successfully'})
+#  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLogin(TokenObtainPairView):
  def post(self, request, *args, **kwargs):
