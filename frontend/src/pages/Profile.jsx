@@ -1,35 +1,27 @@
 import axios from 'axios';
 import React,{ useContext, useEffect, useState} from 'react'
 import { UserContext } from '../context/UserContext';
+import { jwtDecode } from "jwt-decode";
 
 const Profile = () => {
  const { userToken } = useContext(UserContext);
  const [profile, setProfile] = useState({});
 
- function getCookie(name) {
-  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-  return cookieValue ? cookieValue.pop() : '';
- }
-
- const csrftoken = getCookie('csrftoken');
- 
- const headers = {
-  'Content-Type': 'application/json',
-  'X-CSRFToken': csrftoken,
-  Authorization : `Bearer ${userToken}`,
- };
-
  useEffect(() => {
-  if (!profile.id) {
-   axios.get(`http://127.0.0.1:8000/account/get_user_profile/1`)
-    .then(response => {
-     setProfile(response.data);
-    })
-    .catch(error => {
-     console.error('Error fetching profile:', error);
-    });
+
+  if (userToken) {
+   const decoded = jwtDecode(userToken);
+   const user = decoded.user_id;
+   console.log(user);
+  axios.get(`http://127.0.0.1:8000/account/get_user_profile/${user}`)
+   .then(response => {
+    setProfile(response.data);
+   })
+   .catch(error => {
+    console.error('Error fetching profile:', error);
+   });
   }
- }, []);
+ }, [userToken]);
 
  const submitProfile = (e) => {
   e.preventDefault();
@@ -37,12 +29,12 @@ const Profile = () => {
    username: e.target.username.value,
   //  password: e.target.password.value,
   };
-  axios.put(`http://127.0.0.1:8000/account/change_profile/${profile.id}`, data, {headers} )
+  axios.put(`http://127.0.0.1:8000/account/change_profile/${profile.id}`, data)
    .catch(error => {
     console.error('Error submitting post:', error);
    });
  };
-console.log(profile);
+
  return (
   <div className='flex flex-col items-center bg-black h-[100vh] text-white'>
    <p>
