@@ -4,7 +4,6 @@ import { UserContext } from '../context/UserContext';
 
 const Profile = () => {
  const { userToken } = useContext(UserContext);
- const [user, setUser] = useState({});
  const [profile, setProfile] = useState({});
 
  function getCookie(name) {
@@ -36,14 +35,14 @@ const Profile = () => {
   e.preventDefault();
   const data = {
    username: e.target.username.value,
-   password: e.target.password.value,
+  //  password: e.target.password.value,
   };
-  setUser(data);
-
+  axios.put(`http://127.0.0.1:8000/account/change_profile/${profile.id}`, data, {headers} )
+   .catch(error => {
+    console.error('Error submitting post:', error);
+   });
  };
-
- console.log(headers);
-
+console.log(profile);
  return (
   <div className='flex flex-col items-center bg-black h-[100vh] text-white'>
    <p>
