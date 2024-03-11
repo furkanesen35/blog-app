@@ -21,7 +21,7 @@ const Profile = () => {
 
  useEffect(() => {
   if (!profile.id) {
-   axios.get("http://127.0.0.1:8000/account/get_user_profile/1")
+   axios.get(`http://127.0.0.1:8000/account/get_user_profile/1`)
     .then(response => {
      setProfile(response.data);
     })
@@ -66,6 +66,5 @@ console.log(profile);
   </div>
  );
 };
-
 
 export default Profile

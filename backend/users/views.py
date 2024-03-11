@@ -1,16 +1,12 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate,login
 from .serializers import RegisterSerializer,LoginSerializer,UserSerializer
-from rest_framework.decorators import api_view,authentication_classes,permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.http import JsonResponse
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
 
 @api_view(["GET"])
 def all_users(request):
@@ -41,13 +37,6 @@ def ChangeUserInfoAndPassword(request,id):
   serializer.save()
   return Response({'message': 'User information updated successfully'})
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#  user = request.user
-#  serializer = UserSerializer(user, data=request.data, partial=True)
-#  if serializer.is_valid():
-#   serializer.save()
-#   return Response({'message': 'User information updated successfully'})
-#  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLogin(TokenObtainPairView):
  def post(self, request, *args, **kwargs):
