@@ -76,7 +76,7 @@ const PostEdit = ({ slug }) => {
 
  return (
   <>
-   {userToken ? 
+   {!userToken ? 
     <div className='flex justify-center bg-black h-[100vh] text-white'>
      <form className='flex flex-col w-[300px]' action="" method='POST' onSubmit={submitChanges}>
       <label htmlFor="title">Title</label>
@@ -90,7 +90,7 @@ const PostEdit = ({ slug }) => {
       </select>
       <label htmlFor="category">Category</label>
       <select name="category" id="category" className='text-black' >
-       {categories.map((category, index) => (
+       {categories?.map((category, index) => (
         <option key={index} value={category.id} className='text-black'>{category.name}</option>
        ))}
       </select>
@@ -98,11 +98,11 @@ const PostEdit = ({ slug }) => {
      </form>
     </div> : 
     <div className='flex flex-col items-center bg-black h-[100vh] text-white'>
-     <div>Title: {data.title}</div>
-     <div>Content: {data.content}</div>
-     <div>Category: {data.category}</div>
-      {data.comments.length ? <div>Comments: {data.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
-     <div>Likes: {data.likes.length}</div>
+     <div>Title: {data?.title}</div>
+     <div>Content: {data?.content}</div>
+     <div>Category: {data?.category}</div>
+      {data.comments?.length ? <div>Comments: {data.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
+     {/* <div>Likes: {data?.likes.length}</div> */}
      <div>
       Leave a comment:
       <form action="" className='flex flex-col text-black' onSubmit={submitComment}>

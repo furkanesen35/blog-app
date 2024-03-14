@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404,HttpResponse
 from .models import Post,Comment,Category,Like,PostView
 from django.contrib.auth.models import User
 from .serializer import PostSerializer,CategorySerializer,CommentSerializer,LikeSerializer,ViewSerializer
@@ -30,6 +30,8 @@ def add_new_post(request):
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(["GET"])
 def post_detail(request,slug):
  post = get_object_or_404(Post,slug=slug)
@@ -49,6 +51,8 @@ def post_edit(request,slug):
   return Response(data)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(["DELETE"])
 def post_delete(request,slug):
  post = get_object_or_404(Post,slug=slug)
@@ -56,6 +60,8 @@ def post_delete(request,slug):
  data = { "message": "Post deleted successfully" }
  return Response(data)
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(["GET"])
 def get_comments(request):
  comments = Comment.objects.all()
@@ -79,12 +85,16 @@ def add_comment(request,slug):
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(["GET"])
 def get_category(request):
  categories = Category.objects.all()
  serializer = CategorySerializer(categories, many=True)
  return Response(serializer.data)
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(["POST"])
 def add_category(request):
  serializer = CategorySerializer(data=request.data)
@@ -94,24 +104,41 @@ def add_category(request):
   return Response(data, status=status.HTTP_201_CREATED)
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(["GET"])
 def get_likes(request):
  likes = Like.objects.all()
  serializer = LikeSerializer(likes, many=True)
  return Response(serializer.data)
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(["POST"])
 def post_like(request,slug):
  post = get_object_or_404(Post,slug=slug)
  user = User.objects.get(id=request.user.id)
  request.data["post"] = post.id
- request.data["user"] = user.id
+ request.data["user"] = user
+ print(request.data)
+ return HttpResponse("done")
+ # serializer = LikeSerializer(data=request.data)
+ # if serializer.is_valid():
+ #  print(serializer)
+ #  serializer.save()
+ #  data = { "message": "Like created successfully" }
+ #  return Response(data, status=status.HTTP_201_CREATED)
+ # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@api_view(["POST"])
+def delete_like(request,slug):
+ post = get_object_or_404(Post,slug=slug)
  serializer = LikeSerializer(data=request.data)
- if serializer.is_valid():
-  serializer.save()
-  data = { "message": "Like created successfully" }
-  return Response(data, status=status.HTTP_201_CREATED)
- return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+ serializer.delete()
+ data = { "message": "Like deleted" }
+ return Response(data, status=status.HTTP_201_CREATED)
 
 @api_view(["GET"])
 def get_views(request):

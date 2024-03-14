@@ -56,8 +56,7 @@ const Main = () => {
        <div>Content: {post.content}</div>
        <div>Category: {categories.map(category => category.id === post.category ? category.name : null) }</div>
         {post.comments.length ? <div>Comments: {post.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
-       <div>Likes: {post.likes.length}</div>
-       <LikeButton/>
+       <LikeButton post={post}/>
        <div>Slug: {post.slug}</div>
       </li>
      ))}

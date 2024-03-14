@@ -1,9 +1,13 @@
 import React from 'react'
 
-const LikeButton = () => {
+const LikeButton = ({post}) => {
+ const handleLike = () => {
+  return console.log(post.slug);
+ }
  return (
   <div>
-   <button>Like</button>
+   <div>Likes: {post.likes.length}</div>
+   <button onClick={handleLike}>{post.slug}</button>
   </div>
  )
 }
