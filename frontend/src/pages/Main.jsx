@@ -1,11 +1,13 @@
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/UserContext';
+import LikeButton from '../components/LikeButton';
 
 const Main = () => {
  const { userToken } = useContext(UserContext);
  const [data, setData] = useState([])
  const [categories, setCategories] = useState([]);
+ const [like, setLike] = useState(false)
 
  useEffect(() => {
   axios.get('http://localhost:8000/get_category/')
@@ -55,6 +57,7 @@ const Main = () => {
        <div>Category: {categories.map(category => category.id === post.category ? category.name : null) }</div>
         {post.comments.length ? <div>Comments: {post.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
        <div>Likes: {post.likes.length}</div>
+       <LikeButton/>
        <div>Slug: {post.slug}</div>
       </li>
      ))}

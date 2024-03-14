@@ -36,10 +36,13 @@ const Post = () => {
    title: e.target.title.value,
    content: e.target.content.value,
    status: e.target.status.value,
-   category: {id:e.target.category.value, name:e.target.category.value2},
+   category: e.target.category.value,
   };
 
-  axios.post("http://localhost:8000/post/add/", data, {headers} )
+  axios.post("http://localhost:8000/post/add/", data, { headers })
+   .then(response => {
+    console.log(response.data);
+   })
    .catch(error => {
     console.error('Error submitting post:', error);
    });

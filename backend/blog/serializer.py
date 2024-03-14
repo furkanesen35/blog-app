@@ -24,8 +24,6 @@ class ViewSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
  comments = CommentSerializer(many=True, read_only=True)
  likes = LikeSerializer(many=True, read_only=True)
-#  category = CategorySerializer(read_only=True)
-#  author = Post.author.field("username")
  class Meta:
   model = Post
   fields = "__all__"
