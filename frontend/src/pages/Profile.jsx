@@ -8,31 +8,36 @@ const Profile = () => {
  const [profile, setProfile] = useState({});
 
  useEffect(() => {
+  const fetchProfile = async () => {
+   try {
+    if (userToken) {
+     const decoded = jwtDecode(userToken);
+     const user = decoded.user_id;
+     const response = await axios.get(`http://127.0.0.1:8000/account/get_user_profile/${user}`);
+     setProfile(response.data);
+    }
+   } catch (error) {
+     console.error('Error fetching profile:', error);
+   }
+  };
 
-  if (userToken) {
-   const decoded = jwtDecode(userToken);
-   const user = decoded.user_id;
-   console.log(user);
-  axios.get(`http://127.0.0.1:8000/account/get_user_profile/${user}`)
-   .then(response => {
-    setProfile(response.data);
-   })
-   .catch(error => {
-    console.error('Error fetching profile:', error);
-   });
-  }
+   fetchProfile();
  }, [userToken]);
 
- const submitProfile = (e) => {
+ const submitProfile = async (e) => {
   e.preventDefault();
   const data = {
-   username: e.target.username.value,
-  //  password: e.target.password.value,
+    username: e.target.username.value,
+    email: e.target.email.value,
+    password: e.target.password.value,
   };
-  axios.put(`http://127.0.0.1:8000/account/change_profile/${profile.id}`, data)
-   .catch(error => {
-    console.error('Error submitting post:', error);
-   });
+
+  try {
+   await axios.put(`http://127.0.0.1:8000/account/change_profile/${profile.id}`, data);
+   setProfile((prevProfile) => ({ ...prevProfile, ...data }));
+  } catch (error) {
+   console.error('Error submitting profile:', error);
+  }
  };
 
  return (
@@ -46,6 +51,10 @@ const Profile = () => {
     <div className='mt-[10px]'>
      <label htmlFor="username">Username:</label>
      <input type="text" name='username' className='text-black'/>
+    </div>
+    <div className='mt-[10px]'>
+     <label htmlFor="email">Email:</label>
+     <input type="email" name='email' className='text-black'/>
     </div>
     <div className='mt-[10px]'>
      <label htmlFor="password">Password:</label>

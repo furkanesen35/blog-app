@@ -80,16 +80,16 @@ const PostEdit = ({ slug }) => {
     <div className='flex justify-center bg-black h-[100vh] text-white'>
      <form className='flex flex-col w-[300px]' action="" method='POST' onSubmit={submitChanges}>
       <label htmlFor="title">Title</label>
-      <input type="text" name='title' id='title' className='text-black' />
+      <input type="text" name='title' id='title' className='text-black' defaultValue={data.title} />
       <label htmlFor="content">Content</label>
-      <textarea name="content" id="content" cols="30" rows="10" className='text-black' />
+      <textarea name="content" id="content" cols="30" rows="10" className='text-black' defaultValue={data.content}/>
       <label htmlFor="status" >Status</label>
-      <select name="status" id="status"  className='text-black'>
+      <select name="status" id="status"  className='text-black' >
        <option value="d" className='text-black'>Draft</option>
        <option value="p" className='text-black'>Published</option>
       </select>
       <label htmlFor="category">Category</label>
-      <select name="category" id="category" className='text-black'>
+      <select name="category" id="category" className='text-black' >
        {categories.map((category, index) => (
         <option key={index} value={category.id} className='text-black'>{category.name}</option>
        ))}

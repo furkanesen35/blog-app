@@ -30,12 +30,11 @@ def get_user_profile(request,id):
  return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(["PUT"])
-def ChangeUserInfoAndPassword(request,id):
+def ChangeUserInfoAndPassword(request, id):
  user = get_object_or_404(User, id=id)
  serializer = UserSerializer(user, data=request.data, partial=True)
  if serializer.is_valid():
   serializer.save()
-  print(serializer.data)
   return Response({'message': 'User information updated successfully'})
  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

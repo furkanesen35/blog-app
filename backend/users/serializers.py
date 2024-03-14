@@ -18,3 +18,10 @@ class UserSerializer(serializers.ModelSerializer):
  class Meta:
   model = User
   fields = "__all__"
+ def validate_password(self, value):
+  return make_password(value)
+ def create(self, validated_data):
+  validated_data['password'] = self.validate_password(validated_data['password'])
+  return super().create(validated_data)
+ def update(self, instance, validated_data):
+  return super().update(instance, validated_data)
