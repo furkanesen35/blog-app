@@ -102,7 +102,7 @@ const PostEdit = ({ slug }) => {
      <div>Content: {data?.content}</div>
      <div>Category: {data?.category}</div>
       {data.comments?.length ? <div>Comments: {data.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
-     {/* <div>Likes: {data?.likes.length}</div> */}
+     <div>Likes: {data?.likes ? data?.likes.length : <></>}</div>
      <div>
       Leave a comment:
       <form action="" className='flex flex-col text-black' onSubmit={submitComment}>
