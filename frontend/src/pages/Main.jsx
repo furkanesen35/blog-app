@@ -7,7 +7,6 @@ const Main = () => {
  const { userToken } = useContext(UserContext);
  const [data, setData] = useState([])
  const [categories, setCategories] = useState([]);
- const [like, setLike] = useState(false)
 
  useEffect(() => {
   axios.get('http://localhost:8000/get_category/')
@@ -45,7 +44,7 @@ const Main = () => {
    fetchedData()
   }
  }, [userToken])
- 
+
  return (
   <>{userToken ? 
    <div className='flex justify-center bg-black text-white'>

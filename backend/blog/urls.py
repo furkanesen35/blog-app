@@ -10,10 +10,11 @@ from .views import (
  add_comment,
  add_category,
  get_likes,
- post_like,
+ # post_like,
  delete_like,
  get_views,
- post_blog_view
+ post_blog_view,
+ PostLikeAPIView,
 )
 
 urlpatterns = [
@@ -27,7 +28,7 @@ urlpatterns = [
  path('get_category/', get_category, name="get_category"),
  path('add_category/', add_category, name="add_category"),
  path('get_likes/', get_likes, name="get_likes"),
- path('<str:slug>/post_like/', post_like, name="post_like"),
+ path('<str:slug>/post_like/', PostLikeAPIView.as_view(), name="post_like"),
  path('<str:slug>/delete_like/', delete_like, name="delete_like"),
  path('get_views/', get_views, name="get_views"),
  path('<str:slug>/post_blog_view/', post_blog_view, name="post_blog_view"),
