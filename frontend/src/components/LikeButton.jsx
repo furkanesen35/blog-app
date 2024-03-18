@@ -18,9 +18,13 @@ const LikeButton = ({ post }) => {
   Authorization: `Bearer ${userToken}`,
  };
 
+ const data = {
+  id: post.id
+ }
+
  const handleLike = () => {
   setIsLiked(prev => !prev)
-  axios.post(`http://127.0.0.1:8000/${post.slug}/post_like/`, {headers})
+  axios.post(`http://127.0.0.1:8000/${post.slug}/post_like/`, data, {headers})
  }
 
  return (

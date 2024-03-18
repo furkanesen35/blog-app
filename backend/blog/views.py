@@ -116,7 +116,20 @@ def get_likes(request):
 @permission_classes([IsAuthenticated])
 @api_view(["POST"])
 def toggleLike(request,slug):
- return Response()
+ user = User.objects.get(id=request.user.id)
+ post = get_object_or_404(Post, slug=slug)
+ request.data["user"] = user.id
+ request.data["post"] = post.id
+ like = Like.objects.filter(user=user.id,post=post.id)
+ if like.exists():
+  like.delete()
+  return Response({"message": "Like deleted"})
+ else:
+  serializer = LikeSerializer(data=request.data)
+  if serializer.is_valid():
+   serializer.save()
+   return Response({"message": "Like created", "data":serializer.data})
+ return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
 def get_views(request):
