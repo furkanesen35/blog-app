@@ -1,12 +1,27 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from "axios"
 
+
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
  const [userToken, setUserToken] = useState(null);
  const [posts, setPosts] = useState([]);
  const [isLiked, setIsLiked] = useState(false);
+ const [profile, setProfile] = useState(null);
+
+ function getCookie(name) {
+  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return cookieValue ? cookieValue.pop() : '';
+ }
+ 
+ const csrftoken = getCookie('csrftoken');
+
+ const headers = {
+  'Content-Type': 'application/json',
+  'X-CSRFToken': csrftoken,
+  Authorization: `Bearer ${userToken}`,
+ };
 
  //login part
  useEffect(() => {
@@ -26,20 +41,10 @@ const UserProvider = ({ children }) => {
   setUserToken(null);
  };
 
+ //profile part
+
+
  //post part
- function getCookie(name) {
-  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-  return cookieValue ? cookieValue.pop() : '';
- }
- 
- const csrftoken = getCookie('csrftoken');
-
- const headers = {
-  'Content-Type': 'application/json',
-  'X-CSRFToken': csrftoken,
-  Authorization: `Bearer ${userToken}`,
- };
-
  useEffect(() => {
   const fetchedData = async () => {
    try {

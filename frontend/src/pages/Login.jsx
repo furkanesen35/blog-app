@@ -4,12 +4,15 @@ import { UserContext } from '../context/UserContext';
 
 const Login = () => {
  const { loginUser } = useContext(UserContext);
+ 
  const submitForm = (e) => {
   e.preventDefault();
+
   const data = {
    username: e.target.username.value,
    password: e.target.password.value,
   };
+
   axios.post("http://localhost:8000/account/api/token/", data)
    .then(res => {
     if (res.data) {
@@ -19,6 +22,7 @@ const Login = () => {
    })
    .catch(error => console.log(error));
  };
+
  return (
   <div className='flex flex-col items-center bg-black h-[100vh] w-[100%]'>
    <div>
