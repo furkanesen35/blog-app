@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from "axios"
+import { jwtDecode } from "jwt-decode";
 
 
 const UserContext = createContext();
@@ -42,7 +43,19 @@ const UserProvider = ({ children }) => {
  };
 
  //profile part
-
+ const fetchProfile = async () => {
+  try {
+   if (userToken) {
+    const decoded = jwtDecode(userToken);
+    const user = decoded.user_id;
+    const response = await axios.get(`http://127.0.0.1:8000/account/get_user_profile/${user}`);
+    setProfile(response.data);
+   }
+  } catch (error) {
+   console.error('Error fetching profile:', error);
+  }
+ };
+ console.log(profile);
 
  //post part
  useEffect(() => {
@@ -56,6 +69,7 @@ const UserProvider = ({ children }) => {
   }
   if (userToken) {
    fetchedData()
+   fetchProfile();
   }
  }, [userToken,isLiked])
 
@@ -65,7 +79,7 @@ const UserProvider = ({ children }) => {
  }
 
  return (
-  <UserContext.Provider value={{ userToken, loginUser, logoutUser, posts, handleLike }}>
+  <UserContext.Provider value={{ userToken, loginUser, logoutUser, posts, handleLike, fetchProfile }}>
    {children}
   </UserContext.Provider>
  );

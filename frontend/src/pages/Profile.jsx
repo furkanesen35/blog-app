@@ -1,26 +1,12 @@
 import axios from 'axios';
 import React,{ useContext, useEffect, useState} from 'react'
 import { UserContext } from '../context/UserContext';
-import { jwtDecode } from "jwt-decode";
 
 const Profile = () => {
- const { userToken } = useContext(UserContext);
+ const { userToken, fetchProfile } = useContext(UserContext);
  const [profile, setProfile] = useState({});
 
  useEffect(() => {
-  const fetchProfile = async () => {
-   try {
-    if (userToken) {
-     const decoded = jwtDecode(userToken);
-     const user = decoded.user_id;
-     const response = await axios.get(`http://127.0.0.1:8000/account/get_user_profile/${user}`);
-     setProfile(response.data);
-    }
-   } catch (error) {
-     console.error('Error fetching profile:', error);
-   }
-  };
-
    fetchProfile();
  }, [userToken]);
 
