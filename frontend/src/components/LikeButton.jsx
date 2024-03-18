@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import axios from "axios"
 import { UserContext } from '../context/UserContext';
 
 const LikeButton = ({ post }) => {
- const { userToken } = useContext(UserContext);
- const [isLiked, setIsLiked] = useState(false)
+ const { userToken, handleLike } = useContext(UserContext);
  function getCookie(name) {
   const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
   return cookieValue ? cookieValue.pop() : '';
@@ -22,15 +21,15 @@ const LikeButton = ({ post }) => {
   id: post.id
  }
 
- const handleLike = () => {
-  setIsLiked(prev => !prev)
+ const lastHandleLike = () => {
   axios.post(`http://127.0.0.1:8000/${post.slug}/post_like/`, data, {headers})
+  handleLike()
  }
 
  return (
   <div>
    <div>Likes: {post.likes.length}</div>
-   <button onClick={handleLike}>{post.slug}</button>
+   <button onClick={lastHandleLike}>{post.slug}</button>
   </div>
  )
 }
