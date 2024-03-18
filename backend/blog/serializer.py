@@ -9,7 +9,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class LikeSerializer(serializers.ModelSerializer):
  class Meta:
   model = Like
-  fields = "__all__"
+  fields = ('id', 'user', 'post')
 
 class CommentSerializer(serializers.ModelSerializer):
  class Meta:

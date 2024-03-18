@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -113,40 +112,11 @@ def get_likes(request):
  serializer = LikeSerializer(likes, many=True)
  return Response(serializer.data)
 
-class PostLikeAPIView(APIView):
-#  authentication_classes = [TokenAuthentication]
-#  permission_classes = [IsAuthenticated]
- def post(self, request, slug):
-  if not request.user.is_authenticated:
-   return Response({'message': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
-  
-  post = get_object_or_404(Post, slug=slug)
-  user = request.user
-  data = {'post': post.pk, 'user': user.pk}
-  return Response(print(data))
-  # serializer = LikeSerializer(data=data)
-  # if serializer.is_valid():
-  #  serializer.save()
-  #  return Response({'message': 'Like created successfully'}, status=status.HTTP_201_CREATED)
-  # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
- def delete(self, request, slug):
-  post = get_object_or_404(Post, slug=slug)
-  user = request.user
-  like = Like.objects.filter(post=post, user=user)
-  if like.exists():
-   like.delete()
-   return Response({'message': 'Like deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
-  return Response({'message': 'Like does not exist'}, status=status.HTTP_404_NOT_FOUND)
-
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 @api_view(["POST"])
-def delete_like(request,slug):
- post = get_object_or_404(Post,slug=slug)
- serializer = LikeSerializer(data=request.data)
- serializer.delete()
- data = { "message": "Like deleted" }
- return Response(data, status=status.HTTP_201_CREATED)
+def toggleLike(request,slug):
+ return Response()
 
 @api_view(["GET"])
 def get_views(request):

@@ -18,22 +18,9 @@ const LikeButton = ({ post }) => {
   Authorization: `Bearer ${userToken}`,
  };
 
- useEffect(() => {
-  if (post.likes === undefined) {
-   setIsLiked(false)
-  } else if (post.likes) {
-   console.log(post.likes)
-  }
- }, [])
- 
-
  const handleLike = () => {
   setIsLiked(prev => !prev)
-  if (isLiked) {
-   axios.post(`http://127.0.0.1:8000/${post.slug}/post_like/`, {headers})
-  } else {
-   axios.delete(`http://127.0.0.1:8000/${post.slug}/post_like/`, {headers})
-  }
+  axios.post(`http://127.0.0.1:8000/${post.slug}/post_like/`, {headers})
  }
 
  return (
