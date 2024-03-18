@@ -3,7 +3,7 @@ import axios from 'axios'
 import { UserContext } from '../context/UserContext';
 
 const PostEdit = ({ slug }) => {
- const { userToken } = useContext(UserContext);
+ const { userToken, profile } = useContext(UserContext);
  const [data, setData] = useState([])
  const [categories, setCategories] = useState([]);
 
@@ -76,7 +76,7 @@ const PostEdit = ({ slug }) => {
 
  return (
   <>
-   {!userToken ? 
+   {data?.author === profile?.id ? 
     <div className='flex justify-center bg-black h-[100vh] text-white'>
      <form className='flex flex-col w-[300px]' action="" method='POST' onSubmit={submitChanges}>
       <label htmlFor="title">Title</label>

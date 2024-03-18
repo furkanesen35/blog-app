@@ -55,7 +55,6 @@ const UserProvider = ({ children }) => {
    console.error('Error fetching profile:', error);
   }
  };
- console.log(profile);
 
  //post part
  useEffect(() => {
