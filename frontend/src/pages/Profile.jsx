@@ -1,10 +1,10 @@
 import axios from 'axios';
-import React,{ useContext, useEffect, useState} from 'react'
+import React,{ useContext, useEffect } from 'react'
 import { UserContext } from '../context/UserContext';
 
 const Profile = () => {
- const { userToken, fetchProfile } = useContext(UserContext);
- const [profile, setProfile] = useState({});
+ const { userToken, fetchProfile, profile } = useContext(UserContext);
+
 
  useEffect(() => {
    fetchProfile();
@@ -20,7 +20,6 @@ const Profile = () => {
 
   try {
    await axios.put(`http://127.0.0.1:8000/account/change_profile/${profile.id}`, data);
-   setProfile((prevProfile) => ({ ...prevProfile, ...data }));
   } catch (error) {
    console.error('Error submitting profile:', error);
   }
@@ -31,7 +30,7 @@ const Profile = () => {
    <p>
     Your Profile Info
    </p>
-   <p>Username: {profile.username}</p>
+   <p>Username: {profile?.username}</p>
    <p>Change your profile settings</p>
    <form action="" method='POST' onSubmit={submitProfile}>
     <div className='mt-[10px]'>
