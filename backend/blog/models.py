@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 def user_directory_path(instance, filename):
- return 'blog/{0}/{1}'.format(instance.author.id)
+ return 'blog/{0}/{1}'.format(instance.author.id, filename)
 
 class Category(models.Model):
  name = models.CharField(max_length=100)
@@ -18,7 +18,7 @@ class Post(models.Model):
  )
  title = models.CharField(max_length=100)
  content = models.TextField()
- image = models.ImageField(upload_to=user_directory_path, blank=True)
+ image = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
  category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=True, null=True)
  publish_date = models.DateTimeField(auto_now_add=True)
  update_date = models.DateTimeField(auto_now=True)

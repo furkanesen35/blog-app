@@ -1,6 +1,7 @@
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -98,6 +99,10 @@ REST_FRAMEWORK = {
  'DEFAULT_AUTHENTICATION_CLASSES': [
   'rest_framework_simplejwt.authentication.JWTAuthentication',
  ],
+ 'DEFAULT_PARSER_CLASSES': [
+  'rest_framework.parsers.JSONParser',
+  'rest_framework.parsers.MultiPartParser',  # Added for image upload
+ ]
 }
 
 AUTHENTICATION_BACKENDS = {
@@ -107,3 +112,10 @@ AUTHENTICATION_BACKENDS = {
 SIMPLE_JWT = {
  'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
 }
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+STATICFILES_DIRS = (
+ os.path.join(BASE_DIR, "static"),
+)

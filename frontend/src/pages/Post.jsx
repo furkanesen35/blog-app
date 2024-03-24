@@ -5,6 +5,7 @@ import { UserContext } from '../context/UserContext';
 const Post = () => {
  const { userToken } = useContext(UserContext);
  const [categories, setCategories] = useState([]);
+ const [imageFile, setImageFile] = useState(null);
 
  function getCookie(name) {
   const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
@@ -37,6 +38,7 @@ const Post = () => {
    content: e.target.content.value,
    status: e.target.status.value,
    category: e.target.category.value,
+   image: e.target.image.value,
   };
 
   axios.post("http://localhost:8000/post/add/", data, { headers })
@@ -58,6 +60,8 @@ const Post = () => {
     <input type="text" name='title' id='title' className='text-black' />
     <label htmlFor="content">Content</label>
     <textarea name="content" id="content" cols="30" rows="10" className='text-black' />
+    <label htmlFor="image">Image</label>
+    <input type="file" name="image" id="image" accept='image/*'/>
     <label htmlFor="status">Status</label>
     <select name="status" id="status" className='text-black'>
      <option value="d" className='text-black'>Draft</option>
