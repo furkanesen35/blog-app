@@ -50,7 +50,7 @@ const PostEdit = ({ slug }) => {
   formData.append('content', e.target.content.value);
   formData.append('status', e.target.status.value);
   formData.append('category', e.target.category.value);
-  formData.append('image', e.target.image.files[0]); // Assuming e.target.image is the input element for the image file
+  formData.append('image', imageFile); // Assuming e.target.image is the input element for the image file
 
   try {
     const response = await axios.put(`http://localhost:8000/${slug}/post_edit`, formData, {
