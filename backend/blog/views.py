@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import MultiPartParser,FormParser
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.decorators import parser_classes
 
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -21,8 +22,6 @@ def get_all_post(request):
 @permission_classes([IsAuthenticated])
 @api_view(["POST"])
 def add_new_post(request):
-#  print(request.data)
-#  return Response("check print")
  parser_classes = (MultiPartParser, FormParser)
  user = User.objects.get(id=request.user.id)
  userid = str(user.id)
@@ -45,10 +44,10 @@ def post_detail(request,slug):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 @api_view(["PUT"])
+@parser_classes([MultiPartParser, FormParser])
 def post_edit(request,slug):
  post = get_object_or_404(Post,slug=slug)
  serializer = PostSerializer(post, data=request.data, partial=True)
- print(request.data)
  if serializer.is_valid():
   serializer.save()
   data = { "message": "Post updated successfully" }

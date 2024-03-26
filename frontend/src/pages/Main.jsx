@@ -24,7 +24,7 @@ const Main = () => {
      {posts.map((post, index) => (
       <li key={index} className='flex flex-col justify-center items-center h-[600px] w-[300px]'>
        <a href={`/detail/${post.slug}`}><div>Title: {post.title}</div></a>
-       <div className='w-[250px]'>
+       <div className='mw-[300px] '>
         <img src={`http://localhost:8000${post.image}`} alt="" />
        </div>
        <div>Content: {post.content}</div>

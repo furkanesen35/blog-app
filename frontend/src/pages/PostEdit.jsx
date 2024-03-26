@@ -6,6 +6,7 @@ const PostEdit = ({ slug }) => {
  const { userToken, profile } = useContext(UserContext);
  const [data, setData] = useState([])
  const [categories, setCategories] = useState([]);
+ const [imageFile, setImageFile] = useState(null);
 
  function getCookie(name) {
   const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
@@ -41,20 +42,31 @@ const PostEdit = ({ slug }) => {
   fetchedDetail()
  }, [slug])
 
- const submitChanges = (e) => {
+ const submitChanges = async (e) => {
   e.preventDefault();
- 
-  const data = {
-   title: e.target.title.value,
-   content: e.target.content.value,
-   status: e.target.status.value,
-   category: e.target.category.value,
-  };
- 
-  axios.put(`http://localhost:8000/${slug}/post_edit`, data, {headers} )
-   .catch(error => {
+
+  const formData = new FormData();
+  formData.append('title', e.target.title.value);
+  formData.append('content', e.target.content.value);
+  formData.append('status', e.target.status.value);
+  formData.append('category', e.target.category.value);
+  formData.append('image', e.target.image.files[0]); // Assuming e.target.image is the input element for the image file
+
+  try {
+    const response = await axios.put(`http://localhost:8000/${slug}/post_edit`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${userToken}`,
+      },
+    });
+    console.log(response.data);
+  } catch (error) {
     console.error('Error submitting post:', error);
-   });
+  }
+};
+
+ const handleImageChange = (e) => {
+  setImageFile(e.target.files[0]);
  };
 // edit part
 
@@ -83,6 +95,8 @@ const PostEdit = ({ slug }) => {
       <input type="text" name='title' id='title' className='text-black' defaultValue={data.title} />
       <label htmlFor="content">Content</label>
       <textarea name="content" id="content" cols="30" rows="10" className='text-black' defaultValue={data.content}/>
+      <label htmlFor="image">Image</label>
+      <input type="file" name="image" id="image" accept='image/*' onChange={handleImageChange} />
       <label htmlFor="status" >Status</label>
       <select name="status" id="status"  className='text-black' >
        <option value="d" className='text-black'>Draft</option>
