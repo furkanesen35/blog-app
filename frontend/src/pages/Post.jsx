@@ -72,7 +72,7 @@ const Post = () => {
     <label htmlFor="category">Category</label>
     <select name="category" id="category" className='text-black' >
      {categories.map((category, index) => (
-      <option key={index} value={category.id} className='text-black' value2={category.name}>{category.name} {category.id}</option>
+      <option key={index} value={category.id} className='text-black' value2={category.name}>{category.name}</option>
      ))}
     </select>
     <input type="submit" />
