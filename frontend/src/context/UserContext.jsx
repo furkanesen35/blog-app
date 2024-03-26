@@ -71,7 +71,7 @@ const UserProvider = ({ children }) => {
    fetchProfile();
   }
  }, [userToken,isLiked])
-
+console.log(posts);
  //like part
  const handleLike = () => {
   setIsLiked(prev => !prev)

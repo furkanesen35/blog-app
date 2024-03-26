@@ -22,8 +22,11 @@ const Main = () => {
    <div className='flex justify-center bg-black text-white'>
     <ul>
      {posts.map((post, index) => (
-      <li key={index} className='flex flex-col justify-center items-center h-[300px] w-[300px]'>
+      <li key={index} className='flex flex-col justify-center items-center h-[600px] w-[300px]'>
        <a href={`/detail/${post.slug}`}><div>Title: {post.title}</div></a>
+       <div className='w-[250px]'>
+        <img src={`http://localhost:8000${post.image}`} alt="" />
+       </div>
        <div>Content: {post.content}</div>
        <div>Category: {categories.map(category => category.id === post.category ? category.name : null) }</div>
         {post.comments.length ? <div>Comments: {post.comments.map((e, index) => ( <div key={index}>{e.content}</div>))}</div> : <></>}
