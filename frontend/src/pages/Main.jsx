@@ -4,7 +4,7 @@ import { UserContext } from '../context/UserContext';
 import LikeButton from '../components/LikeButton';
 
 const Main = () => {
- const { userToken, posts } = useContext(UserContext);
+ const { userToken, posts, fetchedData } = useContext(UserContext);
  const [categories, setCategories] = useState([]);
 
  useEffect(() => {
@@ -15,7 +15,13 @@ const Main = () => {
    .catch(error => {
     console.error('Error fetching categories:', error);
    });
- },[]);
+  },[]);
+  
+ useEffect(() => {
+  fetchedData()
+ }, [])
+  
+
 
  return (
   <>{userToken ? 

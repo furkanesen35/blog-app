@@ -3,7 +3,7 @@ import axios from "axios"
 import { UserContext } from '../context/UserContext';
 
 const LikeButton = ({ post }) => {
- const { userToken, handleLike } = useContext(UserContext);
+ const { userToken, handleLike, fetchedData } = useContext(UserContext);
  function getCookie(name) {
   const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
   return cookieValue ? cookieValue.pop() : '';
@@ -21,9 +21,14 @@ const LikeButton = ({ post }) => {
   id: post.id
  }
 
- const lastHandleLike = () => {
-  axios.post(`http://127.0.0.1:8000/${post.slug}/post_like/`, data, {headers})
-  handleLike()
+ const lastHandleLike = async () => {
+  const response = await axios.post(`http://127.0.0.1:8000/${post.slug}/post_like/`, data, {headers})
+  console.log(response.status);
+  if (response.status === 200) {
+   fetchedData()
+  } else {
+   // console.log(response.status);
+  }
  }
 
  return (
