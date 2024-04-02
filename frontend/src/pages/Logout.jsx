@@ -3,10 +3,10 @@ import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 
 const LogoutComponent = () => {
- const { logoutUser } = useContext(UserContext);
+ const { logoutUser, axiosInstance } = useContext(UserContext);
  const handleLogout = async () => {
   try {
-   await axios.post('http://localhost:8000/account/api/logout/');
+   await axiosInstance.post('/account/api/logout/');
    logoutUser();
    console.log('Logout successful');
   } catch (error) {

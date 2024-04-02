@@ -25,7 +25,9 @@ def add_new_post(request):
  parser_classes = (MultiPartParser, FormParser)
  user = User.objects.get(id=request.user.id)
  userid = str(user.id)
+ request.data._mutable = True
  request.data["author"] = userid
+ request.data._mutable = False
  serializer = PostSerializer(data=request.data)
  if serializer.is_valid():
   serializer.save()

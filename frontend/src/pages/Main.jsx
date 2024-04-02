@@ -1,28 +1,25 @@
-import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../context/UserContext';
 import LikeButton from '../components/LikeButton';
 
 const Main = () => {
- const { userToken, posts, fetchedData } = useContext(UserContext);
+ const { userToken, posts, fetchedData, axiosInstance } = useContext(UserContext);
  const [categories, setCategories] = useState([]);
 
  useEffect(() => {
-  axios.get('http://localhost:8000/get_category/')
+  axiosInstance.get('/get_category/')
    .then(response => {
     setCategories(response.data);
    })
    .catch(error => {
     console.error('Error fetching categories:', error);
    });
-  },[]);
+ },[]);
   
  useEffect(() => {
   fetchedData()
  }, [])
   
-
-
  return (
   <>{userToken ? 
    <div className='flex justify-center bg-black text-white'>

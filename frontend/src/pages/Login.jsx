@@ -3,7 +3,7 @@ import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 
 const Login = () => {
- const { loginUser } = useContext(UserContext);
+ const { loginUser, axiosInstance } = useContext(UserContext);
  
  const submitForm = (e) => {
   e.preventDefault();
@@ -13,7 +13,7 @@ const Login = () => {
    password: e.target.password.value,
   };
 
-  axios.post("http://localhost:8000/account/api/token/", data)
+  axiosInstance.post("/account/api/token/", data)
    .then(res => {
     if (res.data) {
      const token = res.data.access;

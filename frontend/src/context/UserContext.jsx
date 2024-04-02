@@ -21,7 +21,6 @@ const UserProvider = ({ children }) => {
   baseURL: "http://127.0.0.1:8000/",
   timeout: 10000,
   headers:  {
-   'Content-Type': 'application/json',
    'X-CSRFToken': csrftoken,
    Authorization: `Bearer ${userToken}`,
   }
@@ -48,7 +47,7 @@ const UserProvider = ({ children }) => {
    if (userToken) {
     const decoded = jwtDecode(userToken);
     const user = decoded.user_id;
-    const response = await axios.get(`http://127.0.0.1:8000/account/get_user_profile/${user}`);
+    const response = await axiosInstance.get(`/account/get_user_profile/${user}`);
     setProfile(response.data);
    }
   } catch (error) {
@@ -67,7 +66,7 @@ const UserProvider = ({ children }) => {
   }
 
  return (
-  <UserContext.Provider value={{ userToken, loginUser, logoutUser, posts, fetchProfile, profile, fetchedData }}>
+  <UserContext.Provider value={{ userToken, loginUser, logoutUser, posts, fetchProfile, profile, fetchedData, axiosInstance }}>
    {children}
   </UserContext.Provider>
  );

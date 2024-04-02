@@ -3,7 +3,7 @@ import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 
 const Post = () => {
- const { userToken } = useContext(UserContext);
+ const { userToken, axiosInstance } = useContext(UserContext);
  const [categories, setCategories] = useState([]);
  const [imageFile, setImageFile] = useState(null);
 
@@ -21,7 +21,7 @@ const Post = () => {
  };
 
  useEffect(() => {
-  axios.get('http://localhost:8000/get_category/')
+  axiosInstance.get('/get_category/')
    .then(response => {
     setCategories(response.data);
    })
@@ -41,10 +41,10 @@ const Post = () => {
   formData.append('image', imageFile);
 
   try {
-    const response = await axios.post("http://localhost:8000/post/add/", formData, { headers });
-    console.log(response.data);
+   const response = await axiosInstance.post("/post/add/", formData);
+   console.log(response.data);
   } catch (error) {
-    console.error('Error submitting post:', error);
+   console.error('Error submitting post:', error);
   }
  };
 

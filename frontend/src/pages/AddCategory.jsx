@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import axios from "axios"
+import { UserContext } from '../context/UserContext';
 
 const AddCategory = () => {
+ const { axiosInstance } = useContext(UserContext);
  const submitForm = (e) => {
   e.preventDefault()
   const data = {
    name: e.target.name.value,
   }
-  const response = axios
-   .post("http://localhost:8000/add_category/", data)
+  const response = axiosInstance
+   .post("/add_category/", data)
    .then(res => console.log(res))
    .catch(error => console.log(error))
  }
