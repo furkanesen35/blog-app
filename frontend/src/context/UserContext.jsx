@@ -18,7 +18,7 @@ const UserProvider = ({ children }) => {
  const csrftoken = getCookie('csrftoken');
 
  const axiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8000/",
+  baseURL: "http://3.79.117.40:8000/",
   timeout: 10000,
   headers:  {
    'X-CSRFToken': csrftoken,
